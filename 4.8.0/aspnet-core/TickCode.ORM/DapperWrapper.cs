@@ -39,7 +39,7 @@ namespace TickCode.ORM
         {
             using (IDbConnection db = new SqlConnection(connectionStr))
             {
-                return db.QueryFirst<T>(sql);
+                return db.QueryFirstOrDefault<T>(sql);
             }
         }
 

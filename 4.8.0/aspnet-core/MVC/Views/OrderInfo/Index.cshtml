@@ -14,24 +14,71 @@
 @section SearchCondition {
     <div id="tb" style="padding:3px">
         <table class="grid">
-            <colgroup>
-                <col width="10%" />
-                <col width="23%" />
-                <col width="10%" />
-            </colgroup>
             <tbody>
                 <tr>
                     <td width="10%">
-                        <label>供应商名称&nbsp;</label>
+                        <label>订单编号&nbsp;</label>
                     </td>
                     <td align="left">
-                        <input id="suppliername" style="line-height:26px;border:1px solid #ccc">
+                        <input id="orderid" style="line-height:26px;border:1px solid #ccc">
                     </td>
                     <td width="10%">
-                        <label>供应商类型&nbsp;</label>
+                        <label>商品名称&nbsp;</label>
                     </td>
                     <td align="left">
-                        <input id="suppliertype" style="line-height:26px;border:1px solid #ccc">
+                        <input id="productname" style="line-height:26px;border:1px solid #ccc">
+                    </td>
+                    <td width="10%">
+                        <label>商品ID&nbsp;</label>
+                    </td>
+                    <td align="left">
+                        <input id="productid" style="line-height:26px;border:1px solid #ccc">
+                    </td>
+                    <td width="10%">
+                        <label>所属供应商&nbsp;</label>
+                    </td>
+                    <td align="left">
+                        <input id="supplierid" style="line-height:26px;border:1px solid #ccc">
+                    </td>
+                </tr>
+                <tr>
+                    <td width="10%">
+                        <label>联系方式&nbsp;</label>
+                    </td>
+                    <td align="left">
+                        <input id="contact" style="line-height:26px;border:1px solid #ccc">
+                    </td>
+                    <td width="10%">
+                        <label>所用劵号&nbsp;</label>
+                    </td>
+                    <td align="left">
+                        <input id="ticketnumber" style="line-height:26px;border:1px solid #ccc">
+                    </td>
+                    <td width="10%">
+                        <label>批次号&nbsp;</label>
+                    </td>
+                    <td align="left">
+                        <input id="batchnumber" style="line-height:26px;border:1px solid #ccc">
+                    </td>
+                    <td width="10%">
+                        <label>订单时间&nbsp;</label>
+                    </td>
+                    <td align="left">
+                        <input id="createtime" style="line-height:26px;border:1px solid #ccc">
+                    </td>
+                </tr>
+                <tr>
+                    <td width="10%">
+                        <label>物流单号&nbsp;</label>
+                    </td>
+                    <td align="left">
+                        <input id="logisticsnumber" style="line-height:26px;border:1px solid #ccc">
+                    </td>
+                    <td width="10%">
+                        <label>订单状态&nbsp;</label>
+                    </td>
+                    <td align="left">
+                        <input id="orderstatus" style="line-height:26px;border:1px solid #ccc">
                     </td>
                 </tr>
 
@@ -41,20 +88,25 @@
 }
 
 @section GridColumn {
-    <table id="dg" title="商品列表页" class="easyui-datagrid" style="width:1250px;height:500px"
-           url="/Supplier/QuerySupplierList"
+    <table id="dg" title="订单列表页" class="easyui-datagrid" style="width:1250px;height:500px"
+           url="/OrderInfo/QueryOrderList"
            pagination="true"
            rownumbers="true" fitColumns="true" singleSelect="true">
         <thead>
             <tr>
-                <th field="supplierid" width="100">供应商ID</th>
-                <th field="suppliername" width="100">供应商名称</th>
-                <th field="financecontacter" width="100">财务联系人</th>
-                <th field="financephone" width="100">财务联系方式</th>
-                <th field="deliveryname" width="100">发货联系人</th>
-                <th field="deliveryphone" width="100">发货人联系方式</th>
-                <th field="operation" width="100">操作</th>
-                <th field="status" hidden="hidden">状态</th>
+                <th field="orderid" width="100">订单编号</th>
+                <th field="productname" width="100">商品名称</th>
+                <th field="productid" width="100">商品ID</th>
+                <th field="supplier" width="100">所属供应商</th>
+                <th field="buycount" width="100">购买数量</th>
+                <th field="ticketnumber" width="100">所用劵号</th>
+                <th field="batchnumber" width="100">所属批次号</th>
+                <th field="createtime" width="100">订单时间</th>
+                <th field="orderstatus" width="100">订单状态</th>
+                <th field="contact" width="100">联系方式</th>
+                <th field="receiver" width="100">收货人</th>
+                <th field="receiveraddress" width="100">收货地址</th>
+                <th field="logisticsnumber" width="100">物流单号</th>
             </tr>
         </thead>
     </table>
@@ -81,14 +133,6 @@
         function editSupplier() {
             var row = $('#dg').datagrid('getSelected');
             if (row) {
-                //if (row.productstatus == 1) {
-                //    //此为上架状态，不可编辑
-                //    $.messager.alert('警告', '请先下架该商品!', 'warning');
-                //} else {
-                //    $('#dlg').dialog('open').dialog('setTitle', '编辑商品');
-                //    $('#fm').form('load', row);
-                //    url = '/ProductInfos/EditProduct?id=' + row.id;
-                //}
                 window.open("/Supplier/CreateNewSupplier?id=" + row.supplierid)
 
 
@@ -118,13 +162,27 @@
 
         function doSearch() {
             $('#dg').datagrid('load', {
-                suppliername: $('#suppliername').val(),
-                suppliertype: $('#suppliertype').combobox('getValue')
+                orderid: $('#orderid').val(),
+                productname: $('#productname').val(),
+                productid: $('#productid').val(),
+                supplierid: $('#supplierid').combobox('getValue'),
+                contact: $('#contact').val(),
+                ticketnumber: $('#ticketnumber').val(),
+                batchnumber: $('#batchnumber').val(),
+                createtime: $('#createtime').val(),
+                logisticsnumber: $('#logisticsnumber').val(),
+                orderstatus: $('#orderstatus').combobox('getValue'),
             });
         }
 
-        $('#suppliertype').combobox({
-            url: '/Supplier/GetSupplierType',
+        $('#supplierid').combobox({
+            url: '/OrderInfo/GetSupplierName',
+            valueField: 'id',
+            textField: 'name'
+        });
+
+        $('#orderstatus').combobox({
+            url: '/OrderInfo/GetOrderStatus',
             valueField: 'id',
             textField: 'name'
         });
