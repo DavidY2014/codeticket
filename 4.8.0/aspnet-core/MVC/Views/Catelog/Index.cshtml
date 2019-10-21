@@ -1,14 +1,14 @@
 ﻿
 @{
     ViewData["Title"] = "类目管理页";
-    Layout = "~/Views/Shared/Layouts/_MasterDataList.cshtml";
+    Layout = "~/Views/Shared/Layouts/_MasterTreeData.cshtml";
 }
 @section ToolMenuBar{
     <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newCatelog()()">添加根类目</a>
     <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newSecondCatelog()">添加二级类目</a>
 }
 
-@section GridColumn {
+@section TreeGrid {
 
     <div id="class1dlg" class="easyui-dialog" style="width:1000px;height:600px;padding:10px 20px"
          closed="true" buttons="#class1-dlg-buttons">
@@ -55,6 +55,27 @@
         <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#class2dlg').dialog('close')">Cancel</a>
     </div>
 
+
+    <div style="margin:20px 0;"></div>
+    <table title="Folder Browser" class="easyui-treegrid" style="width:700px;height:400px"
+           data-options="
+                url: '/Catelog/GetTreeData',
+                method: 'get',
+                rownumbers: true,
+                idField: 'id',
+                treeField: 'name'
+            ">
+        <thead>
+            <tr>
+                <th data-options="field:'name'" width="220">Name</th>
+                @*<th data-options="field:'size'" width="100" align="right">Size</th>
+                    <th data-options="field:'date'" width="150">Modified Date</th>*@
+            </tr>
+        </thead>
+    </table>
+
+
+
 }
 
 @section Script {
@@ -81,5 +102,11 @@
 
 }
 
+
+@section Style {
+    <link rel="stylesheet" type="text/css" href="http://www.w3cschool.cc/try/jeasyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="http://www.w3cschool.cc/try/jeasyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="http://www.w3cschool.cc/try/jeasyui/demo/demo.css">
+}
 
 

@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace TickCode.ORM.DBModel
+namespace MVC.Models
 {
-    public class dbSupplier
+    public class SupplierCreateNewVM
     {
-        public string name { get; set; }
-        public int id { get; set; }
-
+        public string suppliername { get; set; }
         public int suppliertype { get; set; }
+        public string companyname { get; set; }
+        public string companyaddress { get; set; }
         public string financecontacter { get; set; }
         public string financephone { get; set; }
         public string deliveryname { get; set; }
         public string deliveryphone { get; set; }
-
-        public string companyname { get; set; }
-        public string companyaddress { get; set; }
         public string servicename { get; set; }
         public string servicephone { get; set; }
         public string taxpayernumber { get; set; }

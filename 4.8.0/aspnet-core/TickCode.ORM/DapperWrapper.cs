@@ -43,5 +43,13 @@ namespace TickCode.ORM
             }
         }
 
+        public static void Delete(string sql)
+        {
+            using (IDbConnection db = new SqlConnection(connectionStr))
+            {
+                db.Execute(sql);
+            }
+        }
+
     }
 }

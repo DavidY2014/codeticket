@@ -1,0 +1,182 @@
+﻿@model MVC.Models.SupplierCreateNewVM
+@{
+    ViewData["Title"] = "供应商新增详情";
+    Layout = "~/Views/Shared/Layouts/_MasterDataList.cshtml";
+}
+
+@section ToolMenuBar{
+}
+@section SearchCondition {
+    <div id="tb" style="padding:3px">
+        <form id="fm" method="post">
+            <table class="grid">
+                <tbody>
+                    <tr>
+                        <td width="10%">
+                            <label>供应商名称&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="suppliername" value="@Model.suppliername" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc" required="true">
+                        </td>
+                        <td width="10%">
+                            <label>供应商类型&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="suppliertype" value="@Model.suppliertype" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc" required="true">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>公司名称&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="companyname" value="@Model.companyname" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>公司地址&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input id="companyaddress" value="@Model.companyaddress" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>财务联系人&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="financecontacter" value="@Model.financecontacter" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>财务联系方式&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="financephone" value="@Model.financephone" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>发货联系人&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="deliveryname" value="@Model.deliveryname" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>发货联系方式&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="deliveryphone" value="@Model.deliveryphone" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>售后联系人&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="servicename" value="@Model.servicename" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>售后联系方式&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="servicephone" value="@Model.servicephone" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>纳税人识别号&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="taxpayernumber" value="@Model.taxpayernumber" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>发票抬头&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="billheader" value="@Model.billheader" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>开户行&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="openbank" value="@Model.openbank" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>银行账号&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="bankaccount" value="@Model.bankaccount" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveSupplier()">Save</a>
+    </div>
+
+}
+
+@section GridColumn {
+
+
+}
+
+@section Script {
+
+    <script type="text/javascript">
+        function saveSupplier() {
+            $('#fm').form('submit', {
+                url: "/Supplier/SaveNewSupplier",
+                onSubmit: function () {
+                    return $(this).form('validate');
+                },
+                success: function (result) {
+                    var result = eval('(' + result + ')');
+                    if (result.success) {
+                        $.messager.alert('Info', result.msg, 'info');
+                    } else {
+                        $.messager.show({
+                            title: 'Error',
+                            msg: result.msg
+                        });
+                    }
+                }
+            });
+        }
+
+
+    </script>
+
+}
+@section Style {
+
+    <style type="text/css">
+        #fm {
+            margin: 0;
+            padding: 10px 30px;
+        }
+
+        .ftitle {
+            font-size: 14px;
+            font-weight: bold;
+            color: #666;
+            padding: 5px 0;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .fitem {
+            margin-bottom: 5px;
+        }
+
+            .fitem label {
+                display: inline-block;
+                width: 80px;
+            }
+    </style>
+}

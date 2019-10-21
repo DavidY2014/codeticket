@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewData["Title"] = "_MasterTreeData";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (IsSectionDefined("ToolMenuBar"))
+{
+    @RenderSection("ToolMenuBar");
+}
+@RenderSection("TreeGrid", false)
+
+@RenderSection("Style", false)
+@RenderSection("Script", false)
