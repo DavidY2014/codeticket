@@ -1,0 +1,164 @@
+﻿
+@{
+    ViewData["Title"] = "订单管理";
+    Layout = "~/Views/Shared/Layouts/_MasterDataList.cshtml";
+}
+
+@section ToolMenuBar{
+    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="refresh()">刷新</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="exportExcel()">导出订单</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="import()">导入物流订单</a>
+    <a href="#" class="easyui-linkbutton" plain="true" onclick="doSearch()">查询</a>
+}
+
+@section SearchCondition {
+    <div id="tb" style="padding:3px">
+        <table class="grid">
+            <colgroup>
+                <col width="10%" />
+                <col width="23%" />
+                <col width="10%" />
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td width="10%">
+                        <label>供应商名称&nbsp;</label>
+                    </td>
+                    <td align="left">
+                        <input id="suppliername" style="line-height:26px;border:1px solid #ccc">
+                    </td>
+                    <td width="10%">
+                        <label>供应商类型&nbsp;</label>
+                    </td>
+                    <td align="left">
+                        <input id="suppliertype" style="line-height:26px;border:1px solid #ccc">
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+}
+
+@section GridColumn {
+    <table id="dg" title="商品列表页" class="easyui-datagrid" style="width:1250px;height:500px"
+           url="/Supplier/QuerySupplierList"
+           pagination="true"
+           rownumbers="true" fitColumns="true" singleSelect="true">
+        <thead>
+            <tr>
+                <th field="supplierid" width="100">供应商ID</th>
+                <th field="suppliername" width="100">供应商名称</th>
+                <th field="financecontacter" width="100">财务联系人</th>
+                <th field="financephone" width="100">财务联系方式</th>
+                <th field="deliveryname" width="100">发货联系人</th>
+                <th field="deliveryphone" width="100">发货人联系方式</th>
+                <th field="operation" width="100">操作</th>
+                <th field="status" hidden="hidden">状态</th>
+            </tr>
+        </thead>
+    </table>
+
+
+}
+
+@section Script {
+    <script type="text/javascript">
+        var url;
+        /*渲染每行操作按钮*/
+        function getRowIndex(target) {
+            var tr = $(target).closest('tr.datagrid-row');
+            return parseInt(tr.attr('datagrid-row-index'));
+        }
+        function refresh() {
+            $('#dg').datagrid().refresh();
+        }
+
+        function newSupplier() {
+            //跳转到新增界面
+            window.open("/Supplier/CreateNewSupplier")
+        }
+        function editSupplier() {
+            var row = $('#dg').datagrid('getSelected');
+            if (row) {
+                //if (row.productstatus == 1) {
+                //    //此为上架状态，不可编辑
+                //    $.messager.alert('警告', '请先下架该商品!', 'warning');
+                //} else {
+                //    $('#dlg').dialog('open').dialog('setTitle', '编辑商品');
+                //    $('#fm').form('load', row);
+                //    url = '/ProductInfos/EditProduct?id=' + row.id;
+                //}
+                window.open("/Supplier/CreateNewSupplier?id=" + row.supplierid)
+
+
+            }
+        }
+
+
+        function removeSupplier() {
+            var selectItem = $('#dg').datagrid('getSelected');
+            if (selectItem) {
+                $.messager.confirm('Confirm', '你确定要移除此供应商吗?', function (r) {
+                    if (r) {
+                        $.post('/Supplier/RemoveSupplier', { supplierid: selectItem.supplierid }, function (result) {
+                            if (result.success) {
+                                $('#dg').datagrid('reload');	// reload the user data
+                            } else {
+                                $.messager.show({	// show error message
+                                    title: 'Error',
+                                    msg: result.msg
+                                });
+                            }
+                        }, 'json');
+                    }
+                });
+            }
+        }
+
+        function doSearch() {
+            $('#dg').datagrid('load', {
+                suppliername: $('#suppliername').val(),
+                suppliertype: $('#suppliertype').combobox('getValue')
+            });
+        }
+
+        $('#suppliertype').combobox({
+            url: '/Supplier/GetSupplierType',
+            valueField: 'id',
+            textField: 'name'
+        });
+
+
+    </script>
+}
+
+@section Style {
+    <style type="text/css">
+        #fm {
+            margin: 0;
+            padding: 10px 30px;
+        }
+
+        .ftitle {
+            font-size: 14px;
+            font-weight: bold;
+            color: #666;
+            padding: 5px 0;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .fitem {
+            margin-bottom: 5px;
+        }
+
+            .fitem label {
+                display: inline-block;
+                width: 80px;
+            }
+    </style>
+}
+
+
+
