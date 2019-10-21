@@ -1,0 +1,63 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Header {
+}
+@section Script {
+
+}
+
+
+<div title="商品管理" style="padding:10px;">
+    <div style="height:100%;">
+        <!--导航栏 NavBar-->
+        <div style="width:100%;" class="navbar">
+            <div class="navbar-backmenu-url">
+                <a href="javascript:;" title="返回上级菜单" onclick="ColipuPageBase.prototype.showConfirm('即将返回主页，确定离开？',function(){window.location='@ViewBag.backMenuUrl'})"><span>@ViewBag.backMenu</span></a>
+            </div>
+            <div class="navbar-menu">
+                <span class="navbar-menu-title"> @ViewBag.Title</span>
+            </div>
+        </div>
+
+        <!--可视窗口Portlet Search Panel-->
+        <div class="portlet" style="width: 100%;">
+            <div class="portlet-header">
+                <span>
+                    @if (IsSectionDefined("ToolMenuBar"))
+                    {
+                        @RenderSection("ToolMenuBar");
+                    }
+                </span>
+            </div>
+            <div class="portlet-header">
+                <span>
+                    @if (IsSectionDefined("SearchCondition"))
+                    {
+                        @RenderSection("SearchCondition")
+                    }
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--可视窗口Portlet DataList Panel-->
+<div style="width: 100%; ">
+    <div>
+        <div style="height:100%;">
+            <table id="GridList">
+                <thead>
+                    @RenderSection("GridColumn", false)
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+    </div>
+@RenderSection("Style", false)
+@RenderSection("Script", false)
+
+</div>
+
+

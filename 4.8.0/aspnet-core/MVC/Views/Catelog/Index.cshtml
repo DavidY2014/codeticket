@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewData["Title"] = "类目管理页";
+    Layout = "~/Views/Shared/Layouts/_MasterDataList.cshtml";
+}
+@section ToolMenuBar{
+    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newCatelog()()">添加根类目</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newSecondCatelog()">添加二级类目</a>
+}
+
+@section GridColumn {
+
+    <div id="class1dlg" class="easyui-dialog" style="width:1000px;height:600px;padding:10px 20px"
+         closed="true" buttons="#class1-dlg-buttons">
+        <div class="ftitle">编辑根类目</div>
+        <form id="fm1" method="post" novalidate>
+            <div class="fitem">
+                <label>根类目名称:</label>
+                <input name="class1name" class="easyui-validatebox" required="true">
+            </div>
+            <div class="fitem">
+                <label>根类目排序:</label>
+                <input name="class1sequence" class="easyui-validatebox" required="true">
+            </div>
+
+        </form>
+    </div>
+    <div id="class1-dlg-buttons">
+        <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveClass1()">Save</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#class1dlg').dialog('close')">Cancel</a>
+    </div>
+
+
+    <div id="class2dlg" class="easyui-dialog" style="width:1000px;height:600px;padding:10px 20px"
+         closed="true" buttons="#class2-dlg-buttons">
+        <div class="ftitle">编辑二级类目</div>
+        <form id="fm2" method="post" novalidate>
+            <div class="fitem">
+                <label>二级类目名称:</label>
+                <input name="class2name" class="easyui-validatebox" required="true">
+            </div>
+            <div class="fitem">
+                <label>所属根类目:</label>
+                <input name="class1name" class="easyui-validatebox" required="true">
+            </div>
+            <div class="fitem">
+                <label>二级类目排序:</label>
+                <input name="class2sequence" class="easyui-validatebox" required="true">
+            </div>
+
+        </form>
+    </div>
+    <div id="class2-dlg-buttons">
+        <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveClass2()">Save</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#class2dlg').dialog('close')">Cancel</a>
+    </div>
+
+}
+
+@section Script {
+    <script type="text/javascript">
+
+        function newCatelog() {
+            $('#class1dlg').dialog('open').dialog('setTitle', '新商品');
+            $('#fm1').form('clear');
+            url: "/ProductInfos/CreateNewProduct"
+        }
+
+        function newSecondCatelog() {
+            $('#class2dlg').dialog('open').dialog('setTitle', '新商品');
+            $('#fm2').form('clear');
+            url: "/ProductInfos/CreateNewProduct"
+        }
+
+        function saveClass1() {
+        }
+
+        function saveClass2() {
+        }
+    </script>
+
+}
+
+
+
