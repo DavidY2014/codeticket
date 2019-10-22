@@ -1,0 +1,299 @@
+﻿@model MVC.Models.TicketCreateVM
+@{
+    ViewData["Title"] = "提货劵单详情页";
+    Layout = "~/Views/Shared/Layouts/_MasterDataList.cshtml";
+}
+
+@section ToolMenuBar{
+}
+@section SearchCondition {
+    <div id="tb" style="padding:3px">
+        <form id="fm" method="post">
+            <table class="grid">
+                <tbody>
+                    <tr>
+                        <td width="10%">
+                            <label>客户名称&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="custormername" value="@Model.custormername" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc" required="true">
+                        </td>
+                        <td width="10%">
+                            <label>销售人员&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="saleman" value="@Model.saleman" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc" required="true">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>销售数量&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="salecount" value="@Model.salecount" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>内含票数&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input id="couponcount" value="@Model.couponcount" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>销售单价&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="price" value="@Model.price" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>销售总额&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="saleamount" value="@Model.saleamount" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>是否签署合同&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="issigncontract" value="@Model.issigncontract" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>合同名称&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="contractname" value="@Model.contractname" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>合同编号&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="contractcode" value="@Model.contractcode" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>劵有效期开始&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="couponstarttime" value="@Model.couponstarttime" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>劵有效期结束&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="couponendtime" value="@Model.couponendtime" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>激活方式&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="activemethod" value="@Model.activemethod" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>激活日期&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="activetime" value="@Model.activetime" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>收货人&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="receiver" value="@Model.receiver" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>联系方式&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="contact" value="@Model.contact" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>收货地址&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="receiveraddress" value="@Model.receiveraddress" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>可兑商品ID池&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="productpool" value="@Model.productpool" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>页面标题&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="pagetitle" value="@Model.pagetitle" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>顶部banner&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="headerbanner" value="@Model.headerbanner" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>回款方式&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="returnmonenymethod" value="@Model.returnmonenymethod" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>回款日期&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="returnmonenydate" value="@Model.returnmonenydate" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>是否开票&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="isbilling" value="@Model.isbilling" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>发票类型&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="billtype" value="@Model.billtype" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>开票内容&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="billcontent" value="@Model.billcontent" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>发票开头&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="billheader" value="@Model.billheader" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>开纳税人识别号&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="taxernumber" value="@Model.taxernumber" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>开户行&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="openbank" value="@Model.openbank" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>开户行账号&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="bankaccount" value="@Model.bankaccount" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>地址&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="address" value="@Model.address" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>电话&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="phonenumber" value="@Model.phonenumber" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveSupplier()">Save</a>
+    </div>
+
+}
+
+@section GridColumn {
+
+
+}
+
+@section Script {
+
+    <script type="text/javascript">
+        function saveSupplier() {
+            $('#fm').form('submit', {
+                url: "/TicketInfos/SaveNewTicket",
+                onSubmit: function () {
+                    return $(this).form('validate');
+                },
+                success: function (result) {
+                    var result = eval('(' + result + ')');
+                    if (result.success) {
+                        $.messager.alert('Info', result.msg, 'info');
+                    } else {
+                        $.messager.show({
+                            title: 'Error',
+                            msg: result.msg
+                        });
+                    }
+                }
+            });
+        }
+
+
+    </script>
+
+}
+@section Style {
+
+    <style type="text/css">
+        #fm {
+            margin: 0;
+            padding: 10px 30px;
+        }
+
+        .ftitle {
+            font-size: 14px;
+            font-weight: bold;
+            color: #666;
+            padding: 5px 0;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .fitem {
+            margin-bottom: 5px;
+        }
+
+            .fitem label {
+                display: inline-block;
+                width: 80px;
+            }
+    </style>
+}
+

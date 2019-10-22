@@ -1,0 +1,168 @@
+﻿@model MVC.Models.FinanceEditVM
+@{
+    ViewData["Title"] = "EditView";
+    Layout = "~/Views/Shared/Layouts/_MasterDataList.cshtml";
+}
+
+@section ToolMenuBar{
+}
+@section SearchCondition {
+
+    <div id="tb" style="padding:3px">
+        <form id="fm" method="post">
+            <table class="grid">
+                <tbody>
+                    <tr>
+                        <td width="10%">
+                            <label>客户名称&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="custormname" value="@Model.custormname" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc" required="true">
+                        </td>
+                        <td width="10%">
+                            <label>销售人员&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="salename" value="@Model.salename" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc" required="true">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>销售数量&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="salecount" value="@Model.salecount" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>内含次数&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input id="innercount" value="@Model.innercount" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>销售单价&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input id="saleprice" value="@Model.saleprice" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>销售总额&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input id="saletotalamount" value="@Model.saletotalamount" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>是否签署合同&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="issigncontract" value="@Model.issigncontract" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>合同名称&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="contractname" value="@Model.contractname" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>合同编号&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="contractnumber" value="@Model.contractnumber" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>回款信息&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="returnpaymessage" value="@Model.returnpaymessage" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>发票类型&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="billtype" value="@Model.billtype" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>开票内容&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="billcontent" value="@Model.billcontent" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>发票抬头&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="billheader" value="@Model.billheader" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>开纳税人识别号&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="taxernumber" value="@Model.taxernumber" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>开户行&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="openbank" value="@Model.openbank" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>开户行账号&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="bankaccount" value="@Model.bankaccount" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>地址&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="address" value="@Model.address" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>电话&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="phonenumber" value="@Model.phonenumber" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveFinance()">Save</a>
+    </div>
+
+
+
+
+
+
+
+}
+
+@section GridColumn {
+
+
+}
+
+@section Script {
+
+}
+@section Style {
+
+}
+

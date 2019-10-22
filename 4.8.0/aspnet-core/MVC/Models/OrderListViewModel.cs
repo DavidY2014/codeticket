@@ -15,7 +15,7 @@ namespace MVC.Models
         public string ticketnumber { get; set; }
         public string batchnumber { get; set; }
         public DateTime createtime { get; set; }
-        public int orderstatus { get; set; }
+        public string orderstatusDisplay { get; set; }
         public string contact { get; set; }
         public string receiver { get; set; }
         public string receiveraddress { get; set; }

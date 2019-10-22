@@ -1,8 +1,172 @@
 ﻿
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "提货卷管理";
     Layout = "~/Views/Shared/Layouts/_MasterDataList.cshtml";
 }
+@section ToolMenuBar{
+    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="refresh()">刷新</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newTicket()">新增</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="exportExcel()">导出</a>
+    <a href="#" class="easyui-linkbutton" plain="true" onclick="doSearch()">查询</a>
+}
+@section SearchCondition {
+    <div id="tb" style="padding:3px">
+        <table class="grid">
+            <tbody>
+                <tr>
+                    <td width="10%">
+                        <label>客户名称&nbsp;</label>
+                    </td>
+                    <td align="left">
+                        <input id="customername" style="line-height:26px;border:1px solid #ccc">
+                    </td>
+                    <td width="10%">
+                        <label>批次号&nbsp;</label>
+                    </td>
+                    <td align="left">
+                        <input id="batchnumber" style="line-height:26px;border:1px solid #ccc">
+                    </td>
+                </tr>
+                <tr>
+                    <td width="10%">
+                        <label>劵号&nbsp;</label>
+                    </td>
+                    <td align="left">
+                        <input id="ticketnumber" style="line-height:26px;border:1px solid #ccc">
+                    </td>
+                    <td width="10%">
+                        <label>状态&nbsp;</label>
+                    </td>
+                    <td align="left">
+                        <input id="ticketstatus" style="line-height:26px;border:1px solid #ccc">
+                    </td>
+                </tr>
+                <tr>
+                    <td width="10%">
+                        <label>下单日期&nbsp;</label>
+                    </td>
+                    <td align="left">
+                        <input id="ordertime" style="line-height:26px;border:1px solid #ccc">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}
+@section GridColumn {
+    <table id="dg" title="提货劵列表页" class="easyui-datagrid" style="width:1250px;height:250px"
+           url="/TicketInfos/QueryTicketList"
+           pagination="true"
+           rownumbers="true" fitColumns="true" singleSelect="true">
+        <thead>
+            <tr>
+                <th field="customername" width="100">客户名称</th>
+                <th field="saleman" width="100">销售人员</th>
+                <th field="batchnumber" width="100">批次号</th>
+                <th field="salecount" width="100">销售数量/张</th>
+                <th field="price" width="100">销售单价/元</th>
+                <th field="amount" width="100">销售总额/元</th>
+                <th field="ordertime" width="100">下单日期</th>
+                <th field="validitytime" width="50">有效期</th>
+                <th field="ticketnumbers" width="100">劵号段</th>
+                <th field="ticketstatus" width="100">状态</th>
+                <th field="operatorname" width="150">操作人</th>
+                <th field="operation" width="100">操作</th>
+                <th field="saledticketid" hidden="hidden" ></th>
+            </tr>
+        </thead>
+    </table>
 
-<h1>Index</h1>
+}
+@section Script {
+    <script type="text/javascript">
+        var url;
+        /*渲染每行操作按钮*/
+        function refresh() {
+            $('#dg').datagrid().refresh();
+        }
+
+        function newTicket() {
+            window.open("/TicketInfos/CreateNewSaleTicket")
+        }
+
+        function editTicket(target) {
+            var row = $('#dg').datagrid('getSelected');
+            if (row) {
+                window.open("/TicketInfos/CreateNewSaleTicket?saledticketid=" + row.saledticketid)
+            }
+        }
+
+        function checkTicket(target) {
+            var row = $('#dg').datagrid('getSelected');
+            if (row) {
+                window.open("/TicketInfos/CheckSaleTicketInfo?id=" + row.saledticketid)
+            }
+        }
+
+        function manageTicket(target) {
+            var row = $('#dg').datagrid('getSelected');
+            if (row) {
+                window.open("/TicketInfos/ManageTicketInfo?id=" + row.saledticketid)
+            }
+        }
+
+        function exportExcel() {
+
+        }
+
+        function doSearch() {
+            $('#dg').datagrid('load', {
+                productname: $('#productname').val(),
+                productid: $('#productid').val(),
+                supplier: $('#supplier').combobox('getValue'),
+                status: $('#status').combobox('getValue'),
+                firstclass: $('#firstclass').val(),
+                secondclass: $('#secondclass').val()
+            });
+        }
+
+        $('#supplier').combobox({
+            url: '/ProductInfos/GetSupplier',
+            valueField: 'id',
+            textField: 'name'
+        });
+
+
+        $('#status').combobox({
+            url: '/ProductInfos/GetProductStatus',
+            valueField: 'status',
+            textField: 'name'
+        });
+
+    </script>
+}
+
+@section Style {
+    <style type="text/css">
+        #fm {
+            margin: 0;
+            padding: 10px 30px;
+        }
+
+        .ftitle {
+            font-size: 14px;
+            font-weight: bold;
+            color: #666;
+            padding: 5px 0;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .fitem {
+            margin-bottom: 5px;
+        }
+
+            .fitem label {
+                display: inline-block;
+                width: 80px;
+            }
+    </style>
+}
+
 

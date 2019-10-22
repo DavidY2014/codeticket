@@ -1,0 +1,111 @@
+﻿
+@{
+    ViewData["Title"] = "管理劵码页";
+    Layout = "~/Views/Shared/Layouts/_MasterDataList.cshtml";
+}
+@section ToolMenuBar{
+    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="refresh()">刷新</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="freezonBatch()">冻结该批次</a>
+    <a href="#" class="easyui-linkbutton" plain="true" onclick="doSearch()">查询</a>
+}
+@section SearchCondition {
+    <div id="tb" style="padding:3px">
+        <table class="grid">
+            <tbody>
+                <tr>
+                    <td width="10%">
+                        <label>劵号&nbsp;</label>
+                    </td>
+                    <td align="left">
+                        <input id="componnumber" style="line-height:26px;border:1px solid #ccc">
+                    </td>
+                    <td width="10%">
+                        <label>状态&nbsp;</label>
+                    </td>
+                    <td align="left">
+                        <input id="componstatus" style="line-height:26px;border:1px solid #ccc">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}
+@section GridColumn {
+    <table id="dg" title="管理劵码列表页" class="easyui-datagrid" style="width:1250px;height:250px"
+           url="/TicketInfos/QueryComponList"
+           pagination="true"
+           rownumbers="true" fitColumns="true" singleSelect="true">
+        <thead>
+            <tr>
+                <th field="componnumber" width="100">劵号</th>
+                <th field="batchnumber" width="100">所属批次号</th>
+                <th field="componusecount" width="100">内含次数</th>
+                <th field="componremaincount" width="100">当前可用次数</th>
+                <th field="activestatus" width="100">激活状态</th>
+                <th field="exchangestatus" width="100">兑换状态</th>
+                <th field="validitytime" width="100">有效期</th>
+                <th field="operation" width="100">操作</th>
+            </tr>
+        </thead>
+    </table>
+
+}
+@section Script {
+    <script type="text/javascript">
+        var url;
+        /*渲染每行操作按钮*/
+        function refresh() {
+            $('#dg').datagrid().refresh();
+        }
+
+        /*冻结该批次 */
+        function freezonBatch() {
+            
+        } 
+
+        function doSearch() {
+            $('#dg').datagrid('load', {
+                componnumber: $('#componnumber').val(),
+                componstatus: $('#componstatus').combobox('getValue')
+            });
+        }
+
+        $('#status').combobox({
+            url: '/ProductInfos/GetProductStatus',
+            valueField: 'status',
+            textField: 'name'
+        });
+
+    </script>
+}
+
+@section Style {
+    <style type="text/css">
+        #fm {
+            margin: 0;
+            padding: 10px 30px;
+        }
+
+        .ftitle {
+            font-size: 14px;
+            font-weight: bold;
+            color: #666;
+            padding: 5px 0;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .fitem {
+            margin-bottom: 5px;
+        }
+
+            .fitem label {
+                display: inline-block;
+                width: 80px;
+            }
+    </style>
+}
+
+
+
+

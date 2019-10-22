@@ -84,7 +84,7 @@ namespace MVC.Controllers
                 orderVM.ticketnumber = item.ticketnumber;
                 orderVM.batchnumber = item.batchnumber;
                 orderVM.createtime = item.createtime;
-                orderVM.orderstatus = item.orderstatus;
+                orderVM.orderstatusDisplay =  MapOrderStatus(item.orderstatus);
                 orderVM.contact = item.contact;
                 orderVM.receiver = item.receiver;
                 orderVM.receiveraddress = item.receiveraddress;
@@ -114,9 +114,27 @@ namespace MVC.Controllers
             var orderStatus = DapperWrapper.GetAll<int>(sql);
             foreach (var item in orderStatus)
             {
-                ret.Add(new { id = item, name = item });
+                ret.Add(new { id = item, name = MapOrderStatus(item) });
             }
             return Json(ret);
+        }
+
+        public string MapOrderStatus(int status)
+        {
+            var ret = string.Empty;
+            if (status == 0)
+            {
+                ret = "未发货";
+            }
+            if (status == 1)
+            {
+                ret = "已发货";
+            }
+            if (status ==2 )
+            {
+                ret = "已完成";
+            }
+            return ret;
         }
 
     }
