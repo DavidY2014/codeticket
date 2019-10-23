@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 using TickCode.ORM;
-using TickCode.ORM.DBModel;
 
 namespace MVC.Controllers
 {
@@ -43,23 +42,23 @@ namespace MVC.Controllers
                     sql = sql.TrimEnd(charArray);
                 }
             }
-            var efSuppliers = DapperWrapper.GetAll<dbSupplier>(sql);
-            foreach (var item in efSuppliers)
-            {
-                var supplierVM = new SupplierInfoViewModel();
-                #region convert db to viewmodel
-                supplierVM.supplierid = item.id;
-                supplierVM.suppliername = item.name;
-                supplierVM.financecontacter = item.financecontacter;
-                supplierVM.financephone = item.financephone;
-                supplierVM.deliveryname = item.deliveryname;
-                supplierVM.deliveryphone = item.deliveryphone;
-                #endregion
-                var editrow = "<a href=\"#\" onclick=\"editSupplier()\">编辑</a>";
-                var deleterow = "<a href=\"#\" onclick=\"removeSupplier()\">删除</a>";
-                supplierVM.operation =  editrow + " " + deleterow;
-                result.Add(supplierVM);
-            }
+            //var efSuppliers = DapperWrapper.GetAll<dbSupplier>(sql);
+            //foreach (var item in efSuppliers)
+            //{
+            //    var supplierVM = new SupplierInfoViewModel();
+            //    #region convert db to viewmodel
+            //    supplierVM.supplierid = item.id;
+            //    supplierVM.suppliername = item.name;
+            //    supplierVM.financecontacter = item.financecontacter;
+            //    supplierVM.financephone = item.financephone;
+            //    supplierVM.deliveryname = item.deliveryname;
+            //    supplierVM.deliveryphone = item.deliveryphone;
+            //    #endregion
+            //    var editrow = "<a href=\"#\" onclick=\"editSupplier()\">编辑</a>";
+            //    var deleterow = "<a href=\"#\" onclick=\"removeSupplier()\">删除</a>";
+            //    supplierVM.operation =  editrow + " " + deleterow;
+            //    result.Add(supplierVM);
+            //}
             return Json(result);
         }
 
@@ -75,22 +74,22 @@ namespace MVC.Controllers
             if (id > 0)
             {
                 var sql = "select * from dbo.supplier where id=" + id;
-                var dbSupplier = DapperWrapper.GetSingle<dbSupplier>(sql);
-                //convert
-                model.suppliername = dbSupplier.name;
-                model.suppliertype = dbSupplier.suppliertype;
-                model.companyname = dbSupplier.companyname;
-                model.companyaddress = dbSupplier.companyaddress;
-                model.financecontacter = dbSupplier.financecontacter;
-                model.financephone = dbSupplier.financephone;
-                model.deliveryname = dbSupplier.deliveryname;
-                model.deliveryphone = dbSupplier.deliveryphone;
-                model.servicename = dbSupplier.servicename;
-                model.servicephone = dbSupplier.servicephone;
-                model.taxpayernumber = dbSupplier.taxpayernumber;
-                model.billheader = dbSupplier.billheader;
-                model.openbank = dbSupplier.openbank;
-                model.bankaccount = dbSupplier.bankaccount;
+                //var dbSupplier = DapperWrapper.GetSingle<dbSupplier>(sql);
+                ////convert
+                //model.suppliername = dbSupplier.name;
+                //model.suppliertype = dbSupplier.suppliertype;
+                //model.companyname = dbSupplier.companyname;
+                //model.companyaddress = dbSupplier.companyaddress;
+                //model.financecontacter = dbSupplier.financecontacter;
+                //model.financephone = dbSupplier.financephone;
+                //model.deliveryname = dbSupplier.deliveryname;
+                //model.deliveryphone = dbSupplier.deliveryphone;
+                //model.servicename = dbSupplier.servicename;
+                //model.servicephone = dbSupplier.servicephone;
+                //model.taxpayernumber = dbSupplier.taxpayernumber;
+                //model.billheader = dbSupplier.billheader;
+                //model.openbank = dbSupplier.openbank;
+                //model.bankaccount = dbSupplier.bankaccount;
             }
             return View(model);
         }

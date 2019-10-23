@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 using TickCode.ORM;
-using TickCode.ORM.DBModel;
 
 namespace MVC.Controllers
 {
@@ -51,30 +50,30 @@ namespace MVC.Controllers
                     sql = sql.TrimEnd(charArray);
                 }
             }
-            var dbTickets = DapperWrapper.GetAll<dbTicket>(sql);
-            foreach (var item in dbTickets)
-            {
-                var orderVM = new TicketViewModel();
-                #region convert db to viewmodel
-                orderVM.customername = item.customername;
-                orderVM.saleman = item.saleman;
-                orderVM.batchnumber = item.batchnumber;
-                orderVM.salecount = item.salecount.ToString();
-                orderVM.price = item.price.ToString();
-                orderVM.amount = item.amount.ToString();
-                orderVM.ordertime = item.ordertime.ToString();
-                orderVM.validitytime = item.validitytime.ToString();
-                orderVM.ticketnumbers = item.ticketnumbers;
-                orderVM.ticketstatus = MapTicketStatus(item.ticketstatus);
-                orderVM.operatorname = item.operatorname;
-                orderVM.saledticketid = item.saledticketid;
-                var checkrow = "<a href=\"#\" onclick=\"checkTicket(this)\">查看</a>";
-                var editrow = "<a href=\"#\" onclick=\"editTicket(this)\">编辑</a>";
-                var managerow = "<a href=\"#\" onclick=\"manageTicket(this)\">管理劵码</a>";
-                orderVM.operation = checkrow + " " + editrow + " " + managerow;
-                #endregion
-                results.Add(orderVM);
-            }
+            //var dbTickets = DapperWrapper.GetAll<dbTicket>(sql);
+            //foreach (var item in dbTickets)
+            //{
+            //    var orderVM = new TicketViewModel();
+            //    #region convert db to viewmodel
+            //    orderVM.customername = item.customername;
+            //    orderVM.saleman = item.saleman;
+            //    orderVM.batchnumber = item.batchnumber;
+            //    orderVM.salecount = item.salecount.ToString();
+            //    orderVM.price = item.price.ToString();
+            //    orderVM.amount = item.amount.ToString();
+            //    orderVM.ordertime = item.ordertime.ToString();
+            //    orderVM.validitytime = item.validitytime.ToString();
+            //    orderVM.ticketnumbers = item.ticketnumbers;
+            //    orderVM.ticketstatus = MapTicketStatus(item.ticketstatus);
+            //    orderVM.operatorname = item.operatorname;
+            //    orderVM.saledticketid = item.saledticketid;
+            //    var checkrow = "<a href=\"#\" onclick=\"checkTicket(this)\">查看</a>";
+            //    var editrow = "<a href=\"#\" onclick=\"editTicket(this)\">编辑</a>";
+            //    var managerow = "<a href=\"#\" onclick=\"manageTicket(this)\">管理劵码</a>";
+            //    orderVM.operation = checkrow + " " + editrow + " " + managerow;
+            //    #endregion
+            //    results.Add(orderVM);
+            //}
             return Json(results);
         }
 
@@ -90,7 +89,7 @@ namespace MVC.Controllers
             {
                 //编辑界面
                 var sql = "select * from dbo.ticketinfo where saledticketid=" + saledticketid;
-                var dbTicket = DapperWrapper.GetSingle<dbTicket>(sql);
+                //var dbTicket = DapperWrapper.GetSingle<dbTicket>(sql);
             }
 
             return View(model);

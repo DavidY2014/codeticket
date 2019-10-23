@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MVC.Filters;
 using MVC.Models;
 using TickCode.ORM;
-using TickCode.ORM.DBModel;
 
 namespace MVC.Controllers
 {
@@ -71,39 +71,39 @@ namespace MVC.Controllers
                     sql = sql.TrimEnd(charArray);
                 }
             }
-            var dbOrders = DapperWrapper.GetAll<dbOrder>(sql);
-            foreach (var item in dbOrders)
-            {
-                var orderVM = new OrderListViewModel();
-                #region convert db to viewmodel
-                orderVM.orderid = item.orderid;
-                orderVM.productname = DapperWrapper.GetSingle<string>("select productname from dbo.productinfo where productid=" + "'"+item.productid+"'");
-                orderVM.productid = item.productid;
-                orderVM.supplier = DapperWrapper.GetSingle<string>("select name from dbo.supplier where id=" + "'"+item.supplierid+"'");
-                orderVM.buycount = item.buycount;
-                orderVM.ticketnumber = item.ticketnumber;
-                orderVM.batchnumber = item.batchnumber;
-                orderVM.createtime = item.createtime;
-                orderVM.orderstatusDisplay =  MapOrderStatus(item.orderstatus);
-                orderVM.contact = item.contact;
-                orderVM.receiver = item.receiver;
-                orderVM.receiveraddress = item.receiveraddress;
-                orderVM.logisticsnumber = item.logisticsnumber;
-                #endregion
-                results.Add(orderVM);
-            }
+            //var dbOrders = DapperWrapper.GetAll<dbOrder>(sql);
+            //foreach (var item in dbOrders)
+            //{
+            //    var orderVM = new OrderListViewModel();
+            //    #region convert db to viewmodel
+            //    orderVM.orderid = item.orderid;
+            //    orderVM.productname = DapperWrapper.GetSingle<string>("select productname from dbo.productinfo where productid=" + "'"+item.productid+"'");
+            //    orderVM.productid = item.productid;
+            //    orderVM.supplier = DapperWrapper.GetSingle<string>("select name from dbo.supplier where id=" + "'"+item.supplierid+"'");
+            //    orderVM.buycount = item.buycount;
+            //    orderVM.ticketnumber = item.ticketnumber;
+            //    orderVM.batchnumber = item.batchnumber;
+            //    orderVM.createtime = item.createtime;
+            //    orderVM.orderstatusDisplay =  MapOrderStatus(item.orderstatus);
+            //    orderVM.contact = item.contact;
+            //    orderVM.receiver = item.receiver;
+            //    orderVM.receiveraddress = item.receiveraddress;
+            //    orderVM.logisticsnumber = item.logisticsnumber;
+            //    #endregion
+            //    results.Add(orderVM);
+            //}
             return Json(results);
         }
 
         public ActionResult GetSupplierName()
         {
             var ret = new List<object>();
-            var sql = "select * from dbo.supplier";
-            var dbSuppliers = DapperWrapper.GetAll<dbSupplier>(sql);
-            foreach (var item in dbSuppliers)
-            {
-                ret.Add(new { id = item.id, name = item.name });
-            }
+            //var sql = "select * from dbo.supplier";
+            //var dbSuppliers = DapperWrapper.GetAll<dbSupplier>(sql);
+            //foreach (var item in dbSuppliers)
+            //{
+            //    ret.Add(new { id = item.id, name = item.name });
+            //}
             return Json(ret);
         }
 
