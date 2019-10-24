@@ -8,7 +8,7 @@ namespace MVC.Models
     public class SupplierCreateNewVM
     {
         public string suppliername { get; set; }
-        public int suppliertype { get; set; }
+        public int? suppliertype { get; set; }
         public string companyname { get; set; }
         public string companyaddress { get; set; }
         public string financecontacter { get; set; }

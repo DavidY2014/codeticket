@@ -5,11 +5,6 @@ namespace TickCode.ORM.DBModels
 {
     public partial class Tproduct
     {
-        public Tproduct()
-        {
-            TproductImage = new HashSet<TproductImage>();
-        }
-
         public string Id { get; set; }
         public string Name { get; set; }
         public string Title { get; set; }
@@ -24,7 +19,5 @@ namespace TickCode.ORM.DBModels
         public int? Status { get; set; }
         public double? Cost { get; set; }
         public string Description { get; set; }
-
-        public virtual ICollection<TproductImage> TproductImage { get; set; }
     }
 }

@@ -13,10 +13,10 @@ namespace MVC.Models
         public string productid { get; set; }
         public string supplierid { get; set;}
         public string contact { get; set; }
-        public string ticketnumber { get; set; }
+        public string couponnumber { get; set; }
         public string batchnumber { get; set; }
         public DateTime createtime { get; set; }
         public string logisticsnumber { get; set; }
-        public string orderstatus { get;set; }
+        public int? orderstatus { get;set; }
     }
 }

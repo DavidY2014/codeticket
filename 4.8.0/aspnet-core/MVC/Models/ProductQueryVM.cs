@@ -9,9 +9,9 @@ namespace MVC.Models
     {
         public string productname { get; set; }
         public string productid { get; set; }
-        public string supplier { get; set; }
-        public string status { get; set; }
-        public string firstclass { get; set; }
-        public string secondclass { get; set; }
+        public string suppliername { get; set; }
+        public int? status { get; set; }
+        public string class1 { get; set; }
+        public string class2 { get; set; }
     }
 }

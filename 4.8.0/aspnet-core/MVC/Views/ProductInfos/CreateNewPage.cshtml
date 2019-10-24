@@ -1,0 +1,167 @@
+﻿@model MVC.Models.CreateNewProductViewModel
+@{
+    ViewData["Title"] = "CreateNewPage";
+    Layout = "~/Views/Shared/Layouts/_MasterDataList.cshtml";
+}
+
+@section ToolMenuBar{
+}
+@section SearchCondition {
+    <div id="tb" style="padding:3px">
+        <form id="fm" method="post">
+            <table class="grid">
+                <tbody>
+                    <tr>
+                        <td width="10%">
+                            <label>商品名称&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="productname" value="@Model.productname" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc" required="true">
+                        </td>
+                        <td width="10%">
+                            <label>商品标题&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="title" value="@Model.title" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc" required="true">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>一级类目&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="class1" value="@Model.class1" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>二级类目&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="class2" value="@Model.class2" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>配送区域&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="deliveryarea" value="@Model.deliveryarea" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>所属供应商&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="supplier" value="@Model.supplier" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>成本价&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="cost" value="@Model.cost" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>销售价&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="saleprice" value="@Model.saleprice" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>当前可用库存&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="avaliablestock" value="@Model.avaliablestock" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>当前总销量&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="totalsale" value="@Model.totalsale" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="10%">
+                            <label>商品图片&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="productpicturepath" value="@Model.productpicturepath" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                        <td width="10%">
+                            <label>商品详情信息&nbsp;</label>
+                        </td>
+                        <td align="left">
+                            <input name="description" value="@Model.description" class="easyui-validatebox" style="line-height:26px;border:1px solid #ccc">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveProduct()">Save</a>
+    </div>
+
+}
+
+@section GridColumn {
+
+
+}
+
+@section Script {
+
+    <script type="text/javascript">
+        function saveProduct() {
+            $('#fm').form('submit', {
+                url: "/ProductInfos/SaveProduct",
+                onSubmit: function () {
+                    return $(this).form('validate');
+                },
+                success: function (result) {
+                    var result = eval('(' + result + ')');
+                    if (result.success) {
+                        $.messager.alert('Info', result.msg, 'info');
+                    } else {
+                        $.messager.show({
+                            title: 'Error',
+                            msg: result.msg
+                        });
+                    }
+                }
+            });
+        }
+
+
+    </script>
+
+}
+@section Style {
+
+    <style type="text/css">
+        #fm {
+            margin: 0;
+            padding: 10px 30px;
+        }
+
+        .ftitle {
+            font-size: 14px;
+            font-weight: bold;
+            color: #666;
+            padding: 5px 0;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .fitem {
+            margin-bottom: 5px;
+        }
+
+            .fitem label {
+                display: inline-block;
+                width: 80px;
+            }
+    </style>
+}
+

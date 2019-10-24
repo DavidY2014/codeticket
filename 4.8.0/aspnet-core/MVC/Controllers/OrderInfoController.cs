@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using MVC.Filters;
 using MVC.Models;
 using TickCode.ORM;
+using TickCode.ORM.DBModels;
 
 namespace MVC.Controllers
 {
@@ -22,76 +23,63 @@ namespace MVC.Controllers
         public ActionResult QueryOrderList(OrderQueryVM queryModel)
         {
             var results = new List<OrderListViewModel>();
-            StringBuilder sbr = new StringBuilder();
+            var efOrders = new List<Torder>();
+            using (var dbContext = new TicketCodeTestDBContext())
+            {
+                efOrders = dbContext.Torder.ToList();
+            }
             if (queryModel.orderid != null)
             {
-                sbr.Append(" orderid=" + queryModel.orderid  + " and");
+                efOrders = efOrders.Where(item=>item.Id == queryModel.orderid).ToList();
             }
             if (queryModel.productid != null)
             {
-                sbr.Append(" productid=" + queryModel.productid + " and");
+                efOrders = efOrders.Where(item => item.ProductId == queryModel.productid).ToList();
             }
             if (queryModel.supplierid != null)
             {
-                sbr.Append(" supplierid=" +"'"+ queryModel.supplierid +"'"+ " and");
+                efOrders = efOrders.Where(item => item.SupplierId == queryModel.supplierid).ToList();
             }
             if (queryModel.contact != null)
             {
-                sbr.Append(" contact=" + queryModel.contact + " and");
+                efOrders = efOrders.Where(item => item.Phone == queryModel.contact).ToList();
             }
-            if (queryModel.ticketnumber != null)
+            if (queryModel.couponnumber!=null)
             {
-                sbr.Append(" ticketnumber=" + queryModel.ticketnumber + " and");
+                efOrders = efOrders.Where(item => item.CouponNumber == queryModel.couponnumber).ToList();
             }
-            if (queryModel.batchnumber != null)
+            if (queryModel.batchnumber!=null)
             {
-                sbr.Append(" batchnumber=" + queryModel.batchnumber + " and");
+                efOrders = efOrders.Where(item => item.Batch == queryModel.batchnumber).ToList();
             }
-            //if (queryModel.createtime != null)
-            //{
-            //    sbr.Append(" createtime=" + queryModel.createtime + " and");
-            //}
             if (queryModel.logisticsnumber != null)
             {
-                sbr.Append(" logisticsnumber=" + queryModel.logisticsnumber + " and");
+                efOrders = efOrders.Where(item => item.DeliveryNumber == queryModel.logisticsnumber).ToList();
             }
             if (queryModel.orderstatus!=null)
             {
-                sbr.Append(" orderstatus=" + int.Parse(queryModel.orderstatus) + " and");
+                efOrders = efOrders.Where(item => item.Status == queryModel.orderstatus).ToList();
             }
-            var condition = sbr.ToString();
-            var sql = "select * from dbo.orderinfo";
-            if (!string.IsNullOrEmpty(condition))
+            foreach (var item in efOrders)
             {
-                sql += " where ";
-                sql += condition;
-                if (sql.Contains("and"))
-                {
-                    var charArray = new char[] { 'a', 'n', 'd' };
-                    sql = sql.TrimEnd(charArray);
-                }
+                var orderVM = new OrderListViewModel();
+                #region convert db to viewmodel
+                orderVM.orderid = item.orderid;
+                orderVM.productname = DapperWrapper.GetSingle<string>("select productname from dbo.productinfo where productid=" + "'" + item.productid + "'");
+                orderVM.productid = item.productid;
+                orderVM.supplier = DapperWrapper.GetSingle<string>("select name from dbo.supplier where id=" + "'" + item.supplierid + "'");
+                orderVM.buycount = item.buycount;
+                orderVM.ticketnumber = item.ticketnumber;
+                orderVM.batchnumber = item.batchnumber;
+                orderVM.createtime = item.createtime;
+                orderVM.orderstatusDisplay = MapOrderStatus(item.orderstatus);
+                orderVM.contact = item.contact;
+                orderVM.receiver = item.receiver;
+                orderVM.receiveraddress = item.receiveraddress;
+                orderVM.logisticsnumber = item.logisticsnumber;
+                #endregion
+                results.Add(orderVM);
             }
-            //var dbOrders = DapperWrapper.GetAll<dbOrder>(sql);
-            //foreach (var item in dbOrders)
-            //{
-            //    var orderVM = new OrderListViewModel();
-            //    #region convert db to viewmodel
-            //    orderVM.orderid = item.orderid;
-            //    orderVM.productname = DapperWrapper.GetSingle<string>("select productname from dbo.productinfo where productid=" + "'"+item.productid+"'");
-            //    orderVM.productid = item.productid;
-            //    orderVM.supplier = DapperWrapper.GetSingle<string>("select name from dbo.supplier where id=" + "'"+item.supplierid+"'");
-            //    orderVM.buycount = item.buycount;
-            //    orderVM.ticketnumber = item.ticketnumber;
-            //    orderVM.batchnumber = item.batchnumber;
-            //    orderVM.createtime = item.createtime;
-            //    orderVM.orderstatusDisplay =  MapOrderStatus(item.orderstatus);
-            //    orderVM.contact = item.contact;
-            //    orderVM.receiver = item.receiver;
-            //    orderVM.receiveraddress = item.receiveraddress;
-            //    orderVM.logisticsnumber = item.logisticsnumber;
-            //    #endregion
-            //    results.Add(orderVM);
-            //}
             return Json(results);
         }
 

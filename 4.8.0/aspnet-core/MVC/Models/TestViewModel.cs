@@ -9,17 +9,17 @@ namespace MVC.Models
     {
         public string productname { get; set; }
         public string title { get; set; }
-        public int productid { get; set; }
-        public string supplier { get; set; }
-        public string firstclass { get; set; }
-        public string secondclass { get; set; }
-        public string price { get; set; }
-        public string totalremain { get; set; }
-        public string totalsaled { get; set; }
-        public string currentremain { get; set; }
+        public string productid { get; set; }
+        public string suppliername { get; set; }
+        public string class1 { get; set; }
+        public string class2 { get; set; }
+        public double? saleprice { get; set; }
+        public int? avaiablestock { get; set; }
+        public int? saleamount { get; set; }
+        public int? currentremain { get; set; }
         public string status { get; set; }
         public string operation { get; set; }
-        public int productstatus { get; set; }
+        public int? productstatus { get; set; }
     }
 
     public class ProductDetailViewModel
@@ -37,17 +37,17 @@ namespace MVC.Models
 
         public string title { get; set; }
 
-        public string firstclass { get; set; }
+        public string class1 { get; set; }
 
-        public string secondclass { get; set; }
-        public string sendarea { get; set; }
+        public string class2 { get; set; }
+        public string deliveryarea { get; set; }
         public string supplier { get; set; }
-        public string cost { get; set; }
-        public string saleprice { get; set; }
-        public string currentremain { get; set; }
-        public string totalsale { get; set; }
+        public double? cost { get; set; }
+        public double? saleprice { get; set; }
+        public int? avaliablestock { get; set; }
+        public int? totalsale { get; set; }
         public string productpicturepath { get; set; }
-        public string productdescription { get; set; }
+        public string description { get; set; }
     }
 
     public class ProductStatus

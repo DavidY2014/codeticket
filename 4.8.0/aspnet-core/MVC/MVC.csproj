@@ -19,6 +19,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\Extension.Util\Extension.Util.csproj" />
     <ProjectReference Include="..\TickCode.ORM\TickCode.ORM.csproj" />
   </ItemGroup>
 

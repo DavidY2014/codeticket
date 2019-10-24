@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2012                    */
-/* Created on:     10/23/2019 8:53:26 PM                        */
+/* Created on:     10/24/2019 3:01:56 PM                        */
 /*==============================================================*/
 
 
@@ -16,13 +16,6 @@ if exists (select 1
    where r.fkeyid = object_id('TLogin') and o.name = 'FK_TLOGIN_REFERENCE_TROLE')
 alter table TLogin
    drop constraint FK_TLOGIN_REFERENCE_TROLE
-go
-
-if exists (select 1
-   from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
-   where r.fkeyid = object_id('TProductImage') and o.name = 'FK_TPRODUCT_REFERENCE_TPRODUCT')
-alter table TProductImage
-   drop constraint FK_TPRODUCT_REFERENCE_TPRODUCT
 go
 
 if exists (select 1
@@ -120,7 +113,7 @@ go
 /* Table: TBill                                                 */
 /*==============================================================*/
 create table TBill (
-   Id                   varchar(10)          null,
+   Id                   varchar(10)          not null,
    Code                 varchar(20)          null,
    Name                 varchar(20)          null,
    SupplierId           varchar(10)          null,
@@ -134,7 +127,8 @@ create table TBill (
    Openbank             varchar(20)          null,
    BankAccount          varchar(20)          null,
    Address              varchar(30)          null,
-   Phone                varchar(20)          null
+   Phone                varchar(20)          null,
+   constraint PK_TBILL primary key (Id)
 )
 go
 
@@ -159,9 +153,10 @@ go
 /* Table: TClass                                                */
 /*==============================================================*/
 create table TClass (
-   Id                   int                  null,
+   Id                   int                  not null,
    Name                 varchar(20)          null,
-   Level                int                  null
+   Level                int                  null,
+   constraint PK_TCLASS primary key (Id)
 )
 go
 
@@ -184,7 +179,7 @@ go
 /* Table: TCustomer                                             */
 /*==============================================================*/
 create table TCustomer (
-   Code                 varchar(10)          null,
+   Code                 varchar(10)          not null,
    Name                 varchar(20)          null,
    SaleMan              varchar(20)          null,
    SaleCount            int                  null,
@@ -192,7 +187,8 @@ create table TCustomer (
    SaleAmount           double precision     null,
    IsSignContract       bool                 null,
    ContractName         varchar(20)          null,
-   ContractCode         varchar(20)          null
+   ContractCode         varchar(20)          null,
+   constraint PK_TCUSTOMER primary key (Code)
 )
 go
 
@@ -297,10 +293,11 @@ go
 /* Table: TPage                                                 */
 /*==============================================================*/
 create table TPage (
-   Id                   int                  null,
+   Id                   int                  not null,
    Title                varchar(20)          null,
    HeaderBanner         int                  null,
-   TicketId             char(10)             null
+   TicketId             char(10)             null,
+   constraint PK_TPAGE primary key (Id)
 )
 go
 
@@ -308,7 +305,7 @@ go
 /* Table: TProduct                                              */
 /*==============================================================*/
 create table TProduct (
-   Id                   varchar(10)          not null,
+   Id                   varchar(30)          not null,
    Name                 varchar(20)          null,
    Title                varchar(20)          null,
    SupplierId           varchar(10)          null,
@@ -348,7 +345,6 @@ go
 /*==============================================================*/
 create table TProductImage (
    Id                   int                  not null,
-   ProductId            varchar(10)          null,
    Path                 varchar(20)          null,
    constraint PK_TPRODUCTIMAGE primary key (Id)
 )
@@ -448,10 +444,5 @@ go
 alter table TLogin
    add constraint FK_TLOGIN_REFERENCE_TROLE foreign key (RoleId)
       references TRole (RoleId)
-go
-
-alter table TProductImage
-   add constraint FK_TPRODUCT_REFERENCE_TPRODUCT foreign key (ProductId)
-      references TProduct (Id)
 go
 

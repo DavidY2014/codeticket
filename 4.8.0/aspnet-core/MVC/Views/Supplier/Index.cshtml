@@ -76,17 +76,7 @@
         function editSupplier() {
             var row = $('#dg').datagrid('getSelected');
             if (row) {
-                //if (row.productstatus == 1) {
-                //    //此为上架状态，不可编辑
-                //    $.messager.alert('警告', '请先下架该商品!', 'warning');
-                //} else {
-                //    $('#dlg').dialog('open').dialog('setTitle', '编辑商品');
-                //    $('#fm').form('load', row);
-                //    url = '/ProductInfos/EditProduct?id=' + row.id;
-                //}
-                window.open("/Supplier/CreateNewSupplier?id=" + row.supplierid)
-
-
+                window.open("/Supplier/CreateNewSupplier?supplierid=" + row.supplierid)
             }
         }
 

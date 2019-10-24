@@ -8,6 +8,6 @@ namespace MVC.Models
     public class SupplierQueryVM
     {
         public string suppliername { get; set; }
-        public string suppliertype { get; set; }
+        public int? suppliertype { get; set; }
     }
 }

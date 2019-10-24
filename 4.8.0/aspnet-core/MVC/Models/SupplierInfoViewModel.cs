@@ -6,12 +6,12 @@ namespace MVC.Models
 {
     public class SupplierInfoViewModel
     {
-        public int supplierid { get; set; }
-        public string suppliername { get; set; }
+        public string Id { get; set; }
+        public string name { get; set; }
         public string financecontacter { get; set; }
         public string financephone { get; set; }
-        public string deliveryname { get; set; }
-        public string deliveryphone { get; set; }
+        public string sender { get; set; }
+        public string senderphone { get; set; }
         public string operation { get; set; }
     }
 }

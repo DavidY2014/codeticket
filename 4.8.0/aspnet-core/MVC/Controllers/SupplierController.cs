@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Extension.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 using TickCode.ORM;
+using TickCode.ORM.DBModels;
 
 namespace MVC.Controllers
 {
@@ -21,44 +23,32 @@ namespace MVC.Controllers
         public ActionResult QuerySupplierList(SupplierQueryVM queryModel)
         {
             var result = new List<SupplierInfoViewModel>();
-            StringBuilder sbr = new StringBuilder();
-            if (queryModel.suppliername != null)
+            using (var dbContext = new TicketCodeTestDBContext())
             {
-                sbr.Append(" name=" + "'" + queryModel.suppliername + "'" + " and");
-            }
-            if (queryModel.suppliertype != null)
-            {
-                sbr.Append(" suppliertype=" + queryModel.suppliertype + " and");
-            }
-            var condition = sbr.ToString();
-            var sql = "select * from dbo.supplier";
-            if (!string.IsNullOrEmpty(condition))
-            {
-                sql += " where ";
-                sql += condition;
-                if (sql.Contains("and"))
+                var efSuppliers = dbContext.Tsupplier.ToList();
+                if (queryModel.suppliername != null)
                 {
-                    var charArray = new char[] { 'a', 'n', 'd' };
-                    sql = sql.TrimEnd(charArray);
+                    efSuppliers = efSuppliers.Where(item => item.Name == queryModel.suppliername).ToList();
+                }
+                if (queryModel.suppliertype != null)
+                {
+                    efSuppliers = efSuppliers.Where(item => item.Type == queryModel.suppliertype).ToList();
+                }
+                foreach (var item in efSuppliers)
+                {
+                    var supplierVM = new SupplierInfoViewModel();
+                    supplierVM.Id = item.Id;
+                    supplierVM.name = item.Name;
+                    supplierVM.financecontacter = item.FinanceContactor;
+                    supplierVM.financephone = item.FinancePhone;
+                    supplierVM.sender = item.Sender;
+                    supplierVM.senderphone = item.SenderPhone;
+                    var editrow = "<a href=\"#\" onclick=\"editSupplier()\">编辑</a>";
+                    var deleterow = "<a href=\"#\" onclick=\"removeSupplier()\">删除</a>";
+                    supplierVM.operation = editrow + " " + deleterow;
+                    result.Add(supplierVM);
                 }
             }
-            //var efSuppliers = DapperWrapper.GetAll<dbSupplier>(sql);
-            //foreach (var item in efSuppliers)
-            //{
-            //    var supplierVM = new SupplierInfoViewModel();
-            //    #region convert db to viewmodel
-            //    supplierVM.supplierid = item.id;
-            //    supplierVM.suppliername = item.name;
-            //    supplierVM.financecontacter = item.financecontacter;
-            //    supplierVM.financephone = item.financephone;
-            //    supplierVM.deliveryname = item.deliveryname;
-            //    supplierVM.deliveryphone = item.deliveryphone;
-            //    #endregion
-            //    var editrow = "<a href=\"#\" onclick=\"editSupplier()\">编辑</a>";
-            //    var deleterow = "<a href=\"#\" onclick=\"removeSupplier()\">删除</a>";
-            //    supplierVM.operation =  editrow + " " + deleterow;
-            //    result.Add(supplierVM);
-            //}
             return Json(result);
         }
 
@@ -67,29 +57,34 @@ namespace MVC.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ActionResult CreateNewSupplier(int id)
+        public ActionResult CreateNewSupplier(string supplierid)
         {
             var model = new SupplierCreateNewVM();
             //获取supplier的信息
-            if (id > 0)
+            if (supplierid != null)
             {
-                var sql = "select * from dbo.supplier where id=" + id;
-                //var dbSupplier = DapperWrapper.GetSingle<dbSupplier>(sql);
-                ////convert
-                //model.suppliername = dbSupplier.name;
-                //model.suppliertype = dbSupplier.suppliertype;
-                //model.companyname = dbSupplier.companyname;
-                //model.companyaddress = dbSupplier.companyaddress;
-                //model.financecontacter = dbSupplier.financecontacter;
-                //model.financephone = dbSupplier.financephone;
-                //model.deliveryname = dbSupplier.deliveryname;
-                //model.deliveryphone = dbSupplier.deliveryphone;
-                //model.servicename = dbSupplier.servicename;
-                //model.servicephone = dbSupplier.servicephone;
-                //model.taxpayernumber = dbSupplier.taxpayernumber;
-                //model.billheader = dbSupplier.billheader;
-                //model.openbank = dbSupplier.openbank;
-                //model.bankaccount = dbSupplier.bankaccount;
+                using (var dbContext = new TicketCodeTestDBContext())
+                {
+                    var efSupplier = dbContext.Tsupplier.Find(supplierid);
+                    model.suppliername = efSupplier.Name;
+                    model.suppliertype = efSupplier.Type;
+                    model.companyname = efSupplier.CompanyName;
+                    model.companyaddress = efSupplier.CompanyAddress;
+                    model.financecontacter = efSupplier.FinanceContactor;
+                    model.financephone = efSupplier.FinancePhone;
+                    model.deliveryname = efSupplier.Sender;
+                    model.deliveryphone = efSupplier.SenderPhone;
+                    model.servicename = efSupplier.AfterMarketer;
+                    model.servicephone = efSupplier.AfterMarketPhone;
+                    var efBill = dbContext.Tbill.FirstOrDefault(item => item.SupplierId == efSupplier.Id);
+                    if (efBill != null)
+                    {
+                        model.taxpayernumber = efBill.TaxNumber;
+                        model.billheader = efBill.BillHeader;
+                        model.openbank = efBill.Openbank;
+                        model.bankaccount = efBill.BankAccount;
+                    }
+                }
             }
             return View(model);
         }
@@ -98,39 +93,32 @@ namespace MVC.Controllers
         {
             try
             {
-                StringBuilder sbr = new StringBuilder();
-                sbr.Append("insert into dbo.supplier(name,id,suppliertype,financecontacter,financephone,deliveryname,deliveryphone,companyname," +
-                    "companyaddress,servicename,servicephone,taxpayernumber,billheader,openbank,bankaccount) values(");
-                sbr.AppendLine("'");
-                sbr.AppendLine(createModel.suppliername==null?"":createModel.suppliername + "',");
-                sbr.AppendLine(new Random().Next(0, 1000) + ",");
-                sbr.AppendLine(createModel.suppliertype+",");
-                sbr.Append("'");
-                sbr.AppendLine(createModel.financecontacter + "',");
-                sbr.Append("'");
-                sbr.AppendLine(createModel.financephone + "',");
-                sbr.Append("'");
-                sbr.AppendLine(createModel.deliveryname + "',");
-                sbr.Append("'");
-                sbr.AppendLine(createModel.deliveryphone + "',");
-                sbr.Append("'");
-                sbr.AppendLine(createModel.companyname + "',");
-                sbr.Append("'");
-                sbr.AppendLine(createModel.companyaddress + "',");
-                sbr.Append("'");
-                sbr.AppendLine(createModel.servicename + "',");
-                sbr.Append("'");
-                sbr.AppendLine(createModel.servicephone + "',");
-                sbr.Append("'");
-                sbr.AppendLine(createModel.taxpayernumber + "',");
-                sbr.Append("'");
-                sbr.AppendLine(createModel.billheader + "',");
-                sbr.Append("'");
-                sbr.AppendLine( createModel.openbank + "',");
-                sbr.Append("'");
-                sbr.AppendLine(createModel.bankaccount+"'");
-                sbr.AppendLine(")");
-                DapperWrapper.Insert(sbr.ToString());
+                var efSupplier = new Tsupplier();
+                var efBill = new Tbill();
+                efSupplier.Name = createModel.suppliername;
+                efSupplier.Type = createModel.suppliertype;
+                efSupplier.FinanceContactor = createModel.financecontacter;
+                efSupplier.FinancePhone = createModel.financephone;
+                efSupplier.Sender = createModel.deliveryname;
+                efSupplier.SenderPhone = createModel.deliveryphone;
+                efSupplier.CompanyName = createModel.companyname;
+                efSupplier.CompanyAddress = createModel.companyaddress;
+                efSupplier.AfterMarketer = createModel.servicename;
+                efSupplier.AfterMarketPhone = createModel.servicephone;
+                efBill.Id = UniqueGenerator.UniId();
+                efBill.TaxNumber = createModel.taxpayernumber;
+                efBill.BillHeader = createModel.billheader;
+                efBill.Openbank = createModel.openbank;
+                efBill.BankAccount = createModel.bankaccount;
+                efBill.Name = "供应商开票";
+                using (var dbContext = new TicketCodeTestDBContext())
+                {
+                    dbContext.Database.BeginTransaction();
+                    dbContext.Tbill.Add(efBill);
+                    dbContext.Tsupplier.Add(efSupplier);
+                    dbContext.SaveChanges();
+                    dbContext.Database.CommitTransaction();
+                }
                 return Json(new { success = true ,msg="保存成功"});
             }
             catch (Exception ex)
@@ -145,8 +133,12 @@ namespace MVC.Controllers
         {
             try
             {
-                var sql = "delete from dbo.supplier where id=" + supplierid;
-                DapperWrapper.Delete(sql);
+                using (var dbContext = new TicketCodeTestDBContext())
+                {
+                    var efSupplier = dbContext.Tsupplier.Find(supplierid);
+                    dbContext.Tsupplier.Remove(efSupplier);
+                    dbContext.SaveChanges();
+                }
                 return Json(new { success = true });
             }
             catch (Exception ex)
