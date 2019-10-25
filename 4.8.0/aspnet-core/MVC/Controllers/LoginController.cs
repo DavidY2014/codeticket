@@ -16,5 +16,28 @@ namespace MVC.Controllers
             return View();
         }
 
+        public ActionResult RequestPhoneRecap(string phoneNumber)
+        {
+            //send sms messge
+
+
+            return Json("");
+        }
+
+        public ActionResult Register(string username,string password,string phonetoken)
+        {
+            return Json("");
+        }
+        
+
+        public ActionResult LoginRequest()
+        {
+
+            //跳转到内部界面，否则跳转回去
+            return Json("");
+        }
+
+
+
     }
 }
