@@ -9,29 +9,37 @@
 <head>
     <meta charset="UTF-8">
     <title>Error Placement in ValidateBox - jQuery EasyUI Demo</title>
-    <link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css">
-    <link rel="stylesheet" type="text/css" href="../../themes/icon.css">
-    <link rel="stylesheet" type="text/css" href="../demo.css">
-    <script type="text/javascript" src="../../jquery.min.js"></script>
-    <script type="text/javascript" src="../../jquery.easyui.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://www.w3cschool.cc/try/jeasyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="http://www.w3cschool.cc/try/jeasyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="http://www.w3cschool.cc/try/jeasyui/demo/demo.css">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.min.js"></script>
+    <script type="text/javascript" src="http://www.w3cschool.cc/try/jeasyui/jquery.easyui.min.js"></script>
 </head>
 <body>
     <h2>登录</h2>
     <p>This example shows how to display the error message below the field.</p>
     <div style="margin:20px 0;"></div>
-    <div class="easyui-panel" title="Register" style="width:100%;max-width:400px;padding:30px 60px;">
-        <div style="margin-bottom:20px">
-            <label for="username" class="label-top">User Name:</label>
-            <input id="username" class="easyui-validatebox tb" data-options="required:true,validType:'length[3,10]',validateOnCreate:true,err:err">
-        </div>
-        <div style="margin-bottom:20px">
-            <label for="email" class="label-top">Email:</label>
-            <input id="email" class="easyui-validatebox tb" data-options="required:true,validType:'email',validateOnCreate:false,err:err">
-        </div>
-        <div style="margin-bottom:20px">
-            <label for="phone" class="label-top">Phone:</label>
-            <input id="phone" class="easyui-validatebox tb" data-options="required:true,validateOnCreate:false,err:err">
-        </div>
+    <div class="easyui-panel" title="注册" style="width:600%;max-width:800px;padding:30px 60px;">
+        <form id="fm" method="post">
+            <div style="margin-bottom:20px">
+                <label for="username" class="label-top">User Name:</label>
+                <input name="username" class="easyui-validatebox tb" data-options="required:true,validType:'length[3,10]',validateOnCreate:true,err:err">
+            </div>
+            <div style="margin-bottom:20px">
+                <label for="password" class="label-top">Password:</label>
+                <input name="password" class="easyui-validatebox tb" data-options="required:true,validType:'length[3,10]',validateOnCreate:true,err:err">
+            </div>
+            <div style="margin-bottom:20px">
+                <label for="phone" class="label-top">Phone:</label>
+                <input name="phone" class="easyui-validatebox tb" data-options="required:true,validateOnCreate:false,err:err">
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="Login()">登录</a>
+    </div>
+    <div id="dlg-buttons">
+        <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="Register()">注册</a>
     </div>
     <style scoped="scoped">
         .tb {
@@ -49,6 +57,47 @@
         }
     </style>
     <script type="text/javascript">
+
+        function Login() {
+            $('#fm').form('submit', {
+                url: "/Login/LoginRequest",
+                onSubmit: function () {
+                    return $(this).form('validate');
+                },
+                success: function (result) {
+                    var result = eval('(' + result + ')');
+                    if (result.success) {
+                        $.messager.alert('Info', result.msg, 'info');
+                    } else {
+                        $.messager.show({
+                            title: 'Error',
+                            msg: result.msg
+                        });
+                    }
+                }
+            });
+        }
+
+        function Register() {
+            $('#fm').form('submit', {
+                url: "/Login/Register",
+                onSubmit: function () {
+                    return $(this).form('validate');
+                },
+                success: function (result) {
+                    var result = eval('(' + result + ')');
+                    if (result.success) {
+                        $.messager.alert('Info', result.msg, 'info');
+                    } else {
+                        $.messager.show({
+                            title: 'Error',
+                            msg: result.msg
+                        });
+                    }
+                }
+            });
+        }
+
         function err(target, message) {
             var t = $(target);
             if (t.hasClass('textbox-text')) {

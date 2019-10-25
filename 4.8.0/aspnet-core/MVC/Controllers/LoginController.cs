@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Filters;
+using TickCode.ORM.DBModels;
 
 namespace MVC.Controllers
 {
@@ -24,13 +25,20 @@ namespace MVC.Controllers
             return Json("");
         }
 
-        public ActionResult Register(string username,string password,string phonetoken)
+
+        public ActionResult Register(string username,string password)
         {
-            return Json("");
+            using (var dbContext = new TicketCodeTestDBContext())
+            {
+
+            }
+
+
+                return Json("");
         }
         
 
-        public ActionResult LoginRequest()
+        public ActionResult LoginRequest(string username,string password)
         {
 
             //跳转到内部界面，否则跳转回去
