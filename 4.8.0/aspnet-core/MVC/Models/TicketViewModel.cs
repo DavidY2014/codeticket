@@ -7,7 +7,6 @@ namespace MVC.Models
 {
     public class TicketViewModel
     {
-        public int saledticketid { get; set; }
         public string customername { get; set; }
         public string saleman { get; set; }
         public string batchnumber { get; set; }

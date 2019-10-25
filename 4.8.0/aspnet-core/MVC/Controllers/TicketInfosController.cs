@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 using TickCode.ORM;
+using TickCode.ORM.DBModels;
 
 namespace MVC.Controllers
 {
@@ -50,30 +51,33 @@ namespace MVC.Controllers
                     sql = sql.TrimEnd(charArray);
                 }
             }
-            //var dbTickets = DapperWrapper.GetAll<dbTicket>(sql);
-            //foreach (var item in dbTickets)
-            //{
-            //    var orderVM = new TicketViewModel();
-            //    #region convert db to viewmodel
-            //    orderVM.customername = item.customername;
-            //    orderVM.saleman = item.saleman;
-            //    orderVM.batchnumber = item.batchnumber;
-            //    orderVM.salecount = item.salecount.ToString();
-            //    orderVM.price = item.price.ToString();
-            //    orderVM.amount = item.amount.ToString();
-            //    orderVM.ordertime = item.ordertime.ToString();
-            //    orderVM.validitytime = item.validitytime.ToString();
-            //    orderVM.ticketnumbers = item.ticketnumbers;
-            //    orderVM.ticketstatus = MapTicketStatus(item.ticketstatus);
-            //    orderVM.operatorname = item.operatorname;
-            //    orderVM.saledticketid = item.saledticketid;
-            //    var checkrow = "<a href=\"#\" onclick=\"checkTicket(this)\">查看</a>";
-            //    var editrow = "<a href=\"#\" onclick=\"editTicket(this)\">编辑</a>";
-            //    var managerow = "<a href=\"#\" onclick=\"manageTicket(this)\">管理劵码</a>";
-            //    orderVM.operation = checkrow + " " + editrow + " " + managerow;
-            //    #endregion
-            //    results.Add(orderVM);
-            //}
+            var dbTickets = DapperWrapper.GetAll<Tticket>(sql);
+            foreach (var item in dbTickets)
+            {
+                var orderVM = new TicketViewModel();
+                #region convert db to viewmodel
+                using (var dbContext = new TicketCodeTestDBContext())
+                {
+                    var efCustom = dbContext.Tcustomer.ToList().FirstOrDefault(n => n.Code == item.CustomerCode);
+                    orderVM.customername = efCustom.Name;
+                    orderVM.saleman = efCustom.SaleMan;
+                    orderVM.batchnumber = item.Batch;
+                    orderVM.salecount = efCustom.SaleCount.ToString();
+                    orderVM.price = efCustom.Price.ToString();
+                    orderVM.amount = efCustom.SaleAmount.ToString();
+                }
+                orderVM.ordertime = item.CreateTime.ToString();
+                orderVM.validitytime = item.ValidityStartTime.ToString() + item.ValidityEndTime.ToString();
+                orderVM.ticketnumbers = item.CouponRange;
+                orderVM.ticketstatus = MapTicketStatus(item.Status);
+                orderVM.operatorname = item.Operator;
+                var checkrow = "<a href=\"#\" onclick=\"checkTicket(this)\">查看</a>";
+                var editrow = "<a href=\"#\" onclick=\"editTicket(this)\">编辑</a>";
+                var managerow = "<a href=\"#\" onclick=\"manageTicket(this)\">管理劵码</a>";
+                orderVM.operation = checkrow + " " + editrow + " " + managerow;
+                #endregion
+                results.Add(orderVM);
+            }
             return Json(results);
         }
 
@@ -118,11 +122,6 @@ namespace MVC.Controllers
         public ActionResult QueryComponList(int saledticketid)
         {
             var componList = new List<ComponListVewModel>();
-
-
-
-
-
             return Json(componList);
         }
 
@@ -134,38 +133,26 @@ namespace MVC.Controllers
         {
             try
             {
-                StringBuilder sbr = new StringBuilder();
-                //sbr.Append("insert into dbo.supplier(name,id,suppliertype,financecontacter,financephone,deliveryname,deliveryphone,companyname," +
-                //    "companyaddress,servicename,servicephone,taxpayernumber,billheader,openbank,bankaccount) values(");
-                //sbr.AppendLine("'");
-                //sbr.AppendLine(createModel.suppliername == null ? "" : createModel.suppliername + "',");
-                //sbr.AppendLine(new Random().Next(0, 1000) + ",");
-                //sbr.AppendLine(createModel.suppliertype + ",");
-                //sbr.Append("'");
-                //sbr.AppendLine(createModel.financecontacter + "',");
-                //sbr.Append("'");
-                //sbr.AppendLine(createModel.financephone + "',");
-                //sbr.Append("'");
-                //sbr.AppendLine(createModel.deliveryname + "',");
-                //sbr.Append("'");
-                //sbr.AppendLine(createModel.deliveryphone + "',");
-                //sbr.Append("'");
-                //sbr.AppendLine(createModel.companyname + "',");
-                //sbr.Append("'");
-                //sbr.AppendLine(createModel.companyaddress + "',");
-                //sbr.Append("'");
-                //sbr.AppendLine(createModel.servicename + "',");
-                //sbr.Append("'");
-                //sbr.AppendLine(createModel.servicephone + "',");
-                //sbr.Append("'");
-                //sbr.AppendLine(createModel.taxpayernumber + "',");
-                //sbr.Append("'");
-                //sbr.AppendLine(createModel.billheader + "',");
-                //sbr.Append("'");
-                //sbr.AppendLine(createModel.openbank + "',");
-                //sbr.Append("'");
-                //sbr.AppendLine(createModel.bankaccount + "'");
-                //sbr.AppendLine(")");
+                using (var dbContext = new TicketCodeTestDBContext())
+                {
+                    var dbTicket = new Tticket();
+                    var dbCustom = new Tcustomer();
+                    var dbBill = new Tbill();
+                    dbCustom.Name = createModel.custormername;
+                    dbCustom.SaleMan = createModel.saleman;
+                    dbCustom.SaleCount = createModel.salecount;
+                    dbCustom.SaleAmount = createModel.saleamount;
+
+
+
+                    dbContext.Tcustomer.Add(dbCustom);
+     
+
+
+                }
+
+
+                    StringBuilder sbr = new StringBuilder();
                 DapperWrapper.Insert(sbr.ToString());
                 return Json(new { success = true, msg = "保存成功" });
 
@@ -182,8 +169,11 @@ namespace MVC.Controllers
         }
 
 
-        public string MapTicketStatus(int status)
+        public string MapTicketStatus(int? status)
         {
+            if (status == null)
+            { return ""; }
+
             var ret = string.Empty;
             if (status == 0)
             {

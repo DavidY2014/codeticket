@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 using TickCode.ORM;
+using TickCode.ORM.DBModels;
 
 namespace MVC.Controllers
 {
@@ -22,46 +23,46 @@ namespace MVC.Controllers
         public ActionResult QueryFinanceList(FinanceQueryViewModel queryModel)
         {
             var results = new List<FinanceViewModel>();
-            //StringBuilder sbr = new StringBuilder();
-            //if (queryModel.customname != null)
-            //{
-            //    sbr.Append(" customname=" + queryModel.customname + " and");
-            //}
-            //if (queryModel.batchnumber != null)
-            //{
-            //    sbr.Append(" batchnumber=" + queryModel.batchnumber + " and");
-            //}
-            //if (queryModel.returnpaystatus >0)
-            //{
-            //    sbr.Append(" returnpaystatus=" + "'" + queryModel.returnpaystatus + "'" + " and");
-            //}
-            //if (queryModel.billstatus >0)
-            //{
-            //    sbr.Append(" billstatus=" + "'" + queryModel.billstatus + "'" + " and");
-            //}
-            //var condition = sbr.ToString();
-            //var sql = "select * from dbo.financeinfo";
-            //if (!string.IsNullOrEmpty(condition))
-            //{
-            //    sql += " where ";
-            //    sql += condition;
-            //    if (sql.Contains("and"))
-            //    {
-            //        var charArray = new char[] { 'a', 'n', 'd' };
-            //        sql = sql.TrimEnd(charArray);
-            //    }
-            //}
-            //var dbFinances = DapperWrapper.GetAll<dbFinance>(sql);
-            //foreach (var item in dbFinances)
-            //{
-            //    var financeVM = new FinanceViewModel();
-            //    #region convert db to viewmodel
-            //    var checkrow = "<a href=\"#\" onclick=\"checkFinance(this)\">查看</a>";
-            //    var editrow = "<a href=\"#\" onclick=\"editFinance(this)\">编辑</a>";
-            //    financeVM.operation = checkrow + " " + editrow;
-            //    #endregion
-            //    results.Add(financeVM);
-            //}
+            StringBuilder sbr = new StringBuilder();
+            if (queryModel.customname != null)
+            {
+                sbr.Append(" customname=" + queryModel.customname + " and");
+            }
+            if (queryModel.batchnumber != null)
+            {
+                sbr.Append(" batchnumber=" + queryModel.batchnumber + " and");
+            }
+            if (queryModel.returnpaystatus > 0)
+            {
+                sbr.Append(" returnpaystatus=" + "'" + queryModel.returnpaystatus + "'" + " and");
+            }
+            if (queryModel.billstatus > 0)
+            {
+                sbr.Append(" billstatus=" + "'" + queryModel.billstatus + "'" + " and");
+            }
+            var condition = sbr.ToString();
+            var sql = "select * from dbo.financeinfo";
+            if (!string.IsNullOrEmpty(condition))
+            {
+                sql += " where ";
+                sql += condition;
+                if (sql.Contains("and"))
+                {
+                    var charArray = new char[] { 'a', 'n', 'd' };
+                    sql = sql.TrimEnd(charArray);
+                }
+            }
+            var dbFinances = DapperWrapper.GetAll<Tfinance>(sql);
+            foreach (var item in dbFinances)
+            {
+                var financeVM = new FinanceViewModel();
+                #region convert db to viewmodel
+                var checkrow = "<a href=\"#\" onclick=\"checkFinance(this)\">查看</a>";
+                var editrow = "<a href=\"#\" onclick=\"editFinance(this)\">编辑</a>";
+                financeVM.operation = checkrow + " " + editrow;
+                #endregion
+                results.Add(financeVM);
+            }
             return Json(results);
 
         }
