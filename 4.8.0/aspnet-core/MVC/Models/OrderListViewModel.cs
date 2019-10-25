@@ -10,7 +10,7 @@ namespace MVC.Models
         public string orderid { get; set; }
         public string productname { get; set; }
         public string productid { get; set; }
-        public string supplier { get; set; }
+        public string suppliername { get; set; }
         public int buycount { get; set; }
         public string ticketnumber { get; set; }
         public string batchnumber { get; set; }

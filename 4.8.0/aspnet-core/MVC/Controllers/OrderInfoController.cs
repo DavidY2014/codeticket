@@ -64,19 +64,24 @@ namespace MVC.Controllers
             {
                 var orderVM = new OrderListViewModel();
                 #region convert db to viewmodel
-                orderVM.orderid = item.orderid;
-                orderVM.productname = DapperWrapper.GetSingle<string>("select productname from dbo.productinfo where productid=" + "'" + item.productid + "'");
-                orderVM.productid = item.productid;
-                orderVM.supplier = DapperWrapper.GetSingle<string>("select name from dbo.supplier where id=" + "'" + item.supplierid + "'");
-                orderVM.buycount = item.buycount;
-                orderVM.ticketnumber = item.ticketnumber;
-                orderVM.batchnumber = item.batchnumber;
-                orderVM.createtime = item.createtime;
-                orderVM.orderstatusDisplay = MapOrderStatus(item.orderstatus);
-                orderVM.contact = item.contact;
-                orderVM.receiver = item.receiver;
-                orderVM.receiveraddress = item.receiveraddress;
-                orderVM.logisticsnumber = item.logisticsnumber;
+                orderVM.orderid = item.Id;
+                using (var dbContext = new TicketCodeTestDBContext())
+                {
+                    var efProduct = dbContext.Tproduct.Find(item.ProductId);
+                    orderVM.productname = efProduct.Name;
+                    orderVM.productid = efProduct.Id;
+                    var efSupplier = dbContext.Tsupplier.Find(item.SupplierId);
+                    orderVM.suppliername = efSupplier.Name;
+                }
+                orderVM.buycount = item.BuyCount;
+                orderVM.ticketnumber = item.CouponNumber;
+                orderVM.batchnumber = item.Batch;
+                orderVM.createtime = item.Createtime;
+                orderVM.orderstatusDisplay =  MapOrderStatus(item.Status); 
+                orderVM.contact = item.Phone;
+                orderVM.receiver = item.Receiver;
+                orderVM.receiveraddress = item.ReceiverAddress;
+                orderVM.logisticsnumber = item.DeliveryNumber;
                 #endregion
                 results.Add(orderVM);
             }
@@ -86,12 +91,12 @@ namespace MVC.Controllers
         public ActionResult GetSupplierName()
         {
             var ret = new List<object>();
-            //var sql = "select * from dbo.supplier";
-            //var dbSuppliers = DapperWrapper.GetAll<dbSupplier>(sql);
-            //foreach (var item in dbSuppliers)
-            //{
-            //    ret.Add(new { id = item.id, name = item.name });
-            //}
+            var sql = "select distinct(orderstatus) from dbo.TSupplier";
+            var orderStatus = DapperWrapper.GetAll<int>(sql);
+            foreach (var item in orderStatus)
+            {
+                ret.Add(new { id = item, name = MapOrderStatus(item) });
+            }
             return Json(ret);
         }
 
