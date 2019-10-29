@@ -20,7 +20,7 @@ namespace MVC
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
             .UseKestrel()
-            .UseUrls("http://localhost:5002", "http://localhost:8002")
+            //.UseUrls("http://localhost:5002", "http://localhost:8002")
                 //.UseIISIntegration()
                 .UseStartup<Startup>();
     }

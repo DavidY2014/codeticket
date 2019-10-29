@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Filters;
+using MVC.Models;
 using TickCode.ORM.DBModels;
 
 namespace MVC.Controllers
@@ -40,9 +41,20 @@ namespace MVC.Controllers
 
         public ActionResult LoginRequest(string username,string password)
         {
-
+            var ret = new LoginResultVM();
+            ret.Success = false;
+            ret.msg = "failed";
             //跳转到内部界面，否则跳转回去
-            return Json("");
+            using (var dbContext = new TicketCodeTestDBContext())
+            {
+                var efUser = dbContext.Tlogin.Where(item => item.UserName == username && item.Password == password);
+                if (efUser != null)
+                {
+                    ret.Success = true;
+                    return Json(ret);
+                }
+            }
+            return Json(ret);
         }
 
 
