@@ -10,7 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
-using WebAPI.ORM.Models;
 
 namespace WebAPI
 {
@@ -26,8 +25,9 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(typeof(TicketCodeTestDBContext));
-
+            #region register
+            #endregion
+            //services.AddHttpContextAccessor();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             #region swagger UI
@@ -49,12 +49,14 @@ namespace WebAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            //app.UseSession();
             app.UseMvc();
 
             app.UseSwagger();
             app.UseSwaggerUI(c => {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Test API V1");
             });
+     
         }
     }
 }

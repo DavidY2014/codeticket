@@ -5,14 +5,19 @@ namespace WebAPI.ORM.Models
 {
     public partial class Tcustomer
     {
-        public string Code { get; set; }
-        public string Name { get; set; }
-        public string SaleMan { get; set; }
-        public int? SaleCount { get; set; }
-        public double? Price { get; set; }
-        public double? SaleAmount { get; set; }
-        public int? IsSignContract { get; set; }
-        public string ContractName { get; set; }
-        public string ContractCode { get; set; }
+        public Tcustomer()
+        {
+            TdeliveryAddress = new HashSet<TdeliveryAddress>();
+            TgiftCard = new HashSet<TgiftCard>();
+        }
+
+        public int CustomerId { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public DateTime CreateTime { get; set; }
+        public DateTime UpdateTime { get; set; }
+
+        public virtual ICollection<TdeliveryAddress> TdeliveryAddress { get; set; }
+        public virtual ICollection<TgiftCard> TgiftCard { get; set; }
     }
 }
