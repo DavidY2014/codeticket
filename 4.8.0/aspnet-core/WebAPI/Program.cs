@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -19,6 +20,10 @@ namespace WebAPI
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+            .UseKestrel()
+            //.UseUrls("http://localhost:5000", "http://106.54.112.131:9007")
+            .UseKestrel(options => options.Listen(IPAddress.Any, 5001))
+            .UseIISIntegration()
+            .UseStartup<Startup>();
     }
 }

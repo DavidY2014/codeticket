@@ -25,10 +25,10 @@ namespace WebAPI.Areas.Dongfu.Controllers
         public ReturnResult Login(string Username,string Password)
         {
             var ret =  _accessService.Login(Username, Password);
-            if (ret.Success)
-            {
-                HttpContext.Session.SetString("Username", Username);
-            }
+            //if (ret.Success)
+            //{
+            //    HttpContext.Session.SetString("Username", Username);
+            //}
             return ret;
         }
 
@@ -49,11 +49,11 @@ namespace WebAPI.Areas.Dongfu.Controllers
         [HttpPost("ExchangeGiftCard")]
         public ReturnResult ExchangeGiftCard(string GiftCardId, string GiftCardSecret, int CustomCode)
         {
-            var ret = HttpContext.Session.GetString("Username");
-            if (ret == null)
-            {
-                return new ReturnResult { Success = false, Msg = "未登录" };
-            }
+            //var ret = HttpContext.Session.GetString("Username");
+            //if (ret == null)
+            //{
+            //    return new ReturnResult { Success = false, Msg = "未登录" };
+            //}
             return _accessService.ExchangeGiftCard(GiftCardId, GiftCardSecret, CustomCode);
         }
 
@@ -65,11 +65,11 @@ namespace WebAPI.Areas.Dongfu.Controllers
         [HttpGet("GetAllGiftCards")]
         public List<GiftCardModel> GetAllGiftCards(int CustomCode)
         {
-            var ret = HttpContext.Session.GetString("Username");
-            if (ret == null)
-            {
-                return null;
-            }
+            //var ret = HttpContext.Session.GetString("Username");
+            //if (ret == null)
+            //{
+            //    return null;
+            //}
             return _accessService.GetGiftCard(CustomCode);
         }
 
@@ -81,11 +81,11 @@ namespace WebAPI.Areas.Dongfu.Controllers
         [HttpGet("GetCustomerInfo")]
         public CustomDeliveryModel GetCustomerInfo(int CustomerCode)
         {
-            var ret = HttpContext.Session.GetString("Username");
-            if (ret == null)
-            {
-                return null;
-            }
+            //var ret = HttpContext.Session.GetString("Username");
+            //if (ret == null)
+            //{
+            //    return null;
+            //}
             return _accessService.GetCustomerDetail(CustomerCode);
         }
 
@@ -98,11 +98,11 @@ namespace WebAPI.Areas.Dongfu.Controllers
         [HttpPost("AddNewAddressInfo")]
         public ReturnResult AddNewAddressInfo(int customerId, int index, string province, string city, string district, string address)
         {
-            var ret = HttpContext.Session.GetString("Username");
-            if (ret == null)
-            {
-                return new ReturnResult { Success = false, Msg = "未登录" };
-            }
+            //var ret = HttpContext.Session.GetString("Username");
+            //if (ret == null)
+            //{
+            //    return new ReturnResult { Success = false, Msg = "未登录" };
+            //}
             return _accessService.InsertNewAddress(customerId, index, province, city, district, address);
         }
 
