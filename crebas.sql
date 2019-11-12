@@ -1,28 +1,49 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2012                    */
-/* Created on:     10/24/2019 3:01:56 PM                        */
+/* Created on:     11/12/2019 7:17:32 PM                        */
 /*==============================================================*/
 
 
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
-   where r.fkeyid = object_id('TCoupon') and o.name = 'FK_TCOUPON_REFERENCE_TTICKET')
-alter table TCoupon
-   drop constraint FK_TCOUPON_REFERENCE_TTICKET
+   where r.fkeyid = object_id('TBackendUser') and o.name = 'FK_TBACKEND_REFERENCE_TROLE')
+alter table TBackendUser
+   drop constraint FK_TBACKEND_REFERENCE_TROLE
 go
 
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
-   where r.fkeyid = object_id('TLogin') and o.name = 'FK_TLOGIN_REFERENCE_TROLE')
-alter table TLogin
-   drop constraint FK_TLOGIN_REFERENCE_TROLE
+   where r.fkeyid = object_id('TCoupon') and o.name = 'FK_TCOUPON_REFERENCE_TCUSTOME')
+alter table TCoupon
+   drop constraint FK_TCOUPON_REFERENCE_TCUSTOME
+go
+
+if exists (select 1
+   from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
+   where r.fkeyid = object_id('TOrderProduct') and o.name = 'FK_TORDERPR_REFERENCE_TSOORDER')
+alter table TOrderProduct
+   drop constraint FK_TORDERPR_REFERENCE_TSOORDER
+go
+
+if exists (select 1
+   from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
+   where r.fkeyid = object_id('TProduct') and o.name = 'FK_TPRODUCT_REFERENCE_TSUPPLIE')
+alter table TProduct
+   drop constraint FK_TPRODUCT_REFERENCE_TSUPPLIE
+go
+
+if exists (select 1
+   from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
+   where r.fkeyid = object_id('TProductImage') and o.name = 'FK_TPRODUCT_REFERENCE_TPRODUCT')
+alter table TProductImage
+   drop constraint FK_TPRODUCT_REFERENCE_TPRODUCT
 go
 
 if exists (select 1
             from  sysobjects
-           where  id = object_id('TBill')
+           where  id = object_id('TBackendUser')
             and   type = 'U')
-   drop table TBill
+   drop table TBackendUser
 go
 
 if exists (select 1
@@ -48,30 +69,9 @@ go
 
 if exists (select 1
             from  sysobjects
-           where  id = object_id('TFinance')
+           where  id = object_id('TOrderProduct')
             and   type = 'U')
-   drop table TFinance
-go
-
-if exists (select 1
-            from  sysobjects
-           where  id = object_id('TLogin')
-            and   type = 'U')
-   drop table TLogin
-go
-
-if exists (select 1
-            from  sysobjects
-           where  id = object_id('TOrder')
-            and   type = 'U')
-   drop table TOrder
-go
-
-if exists (select 1
-            from  sysobjects
-           where  id = object_id('TPage')
-            and   type = 'U')
-   drop table TPage
+   drop table TOrderProduct
 go
 
 if exists (select 1
@@ -97,56 +97,46 @@ go
 
 if exists (select 1
             from  sysobjects
+           where  id = object_id('TSoOrder')
+            and   type = 'U')
+   drop table TSoOrder
+go
+
+if exists (select 1
+            from  sysobjects
            where  id = object_id('TSupplier')
             and   type = 'U')
    drop table TSupplier
 go
 
-if exists (select 1
-            from  sysobjects
-           where  id = object_id('TTicket')
-            and   type = 'U')
-   drop table TTicket
-go
-
 /*==============================================================*/
-/* Table: TBill                                                 */
+/* Table: TBackendUser                                          */
 /*==============================================================*/
-create table TBill (
-   Id                   varchar(10)          not null,
-   Code                 varchar(20)          null,
-   Name                 varchar(20)          null,
-   SupplierId           varchar(10)          null,
-   TicketId             int                  null,
-   ReturnType           int                  null,
-   IsBill               bool                 null,
-   BillType             int                  null,
-   BillContent          varchar(20)          null,
-   BillHeader           varchar(20)          null,
-   TaxNumber            varchar(20)          null,
-   Openbank             varchar(20)          null,
-   BankAccount          varchar(20)          null,
-   Address              varchar(30)          null,
-   Phone                varchar(20)          null,
-   constraint PK_TBILL primary key (Id)
+create table TBackendUser (
+   UserId               int                  not null,
+   UserName             varchar(10)          null,
+   Password             varchar(10)          null,
+   Telephone            varchar(20)          null,
+   RoleId               int                  null,
+   constraint PK_TBACKENDUSER primary key (UserId)
 )
 go
 
 if exists (select 1 from  sys.extended_properties
-           where major_id = object_id('TBill') and minor_id = 0)
+           where major_id = object_id('TBackendUser') and minor_id = 0)
 begin 
    declare @CurrentUser sysname 
 select @CurrentUser = user_name() 
 execute sp_dropextendedproperty 'MS_Description',  
-   'user', @CurrentUser, 'table', 'TBill' 
+   'user', @CurrentUser, 'table', 'TBackendUser' 
  
 end 
 
 
 select @CurrentUser = user_name() 
 execute sp_addextendedproperty 'MS_Description',  
-   '开票信息', 
-   'user', @CurrentUser, 'table', 'TBill'
+   '后台管理用户表', 
+   'user', @CurrentUser, 'table', 'TBackendUser'
 go
 
 /*==============================================================*/
@@ -154,8 +144,9 @@ go
 /*==============================================================*/
 create table TClass (
    Id                   int                  not null,
-   Name                 varchar(20)          null,
-   Level                int                  null,
+   ClassId              int                  not null,
+   Level                int                  not null,
+   ClassName            varchar(20)          not null,
    constraint PK_TCLASS primary key (Id)
 )
 go
@@ -164,31 +155,47 @@ go
 /* Table: TCoupon                                               */
 /*==============================================================*/
 create table TCoupon (
-   CouponNumber         varchar(20)          not null,
-   TicketId             int                  null,
-   UseCount             int                  null,
-   AvailableCount       int                  null,
-   ActiveStatus         int                  null,
-   ExchangeStatus       int                  null,
-   ValidityTime         datetime             null,
-   constraint PK_TCOUPON primary key (CouponNumber)
+   Id                   int                  not null,
+   No                   varchar(50)          not null,
+   CustomerId           int                  not null,
+   BelongBatch          varchar(50)          not null,
+   VerifyTime           datetime             not null,
+   AviableTimes         int                  not null,
+   TotalTimes           int                  not null,
+   CreateTime           datetime             not null,
+   constraint PK_TCOUPON primary key (Id)
 )
+go
+
+if exists (select 1 from  sys.extended_properties
+           where major_id = object_id('TCoupon') and minor_id = 0)
+begin 
+   declare @CurrentUser sysname 
+select @CurrentUser = user_name() 
+execute sp_dropextendedproperty 'MS_Description',  
+   'user', @CurrentUser, 'table', 'TCoupon' 
+ 
+end 
+
+
+select @CurrentUser = user_name() 
+execute sp_addextendedproperty 'MS_Description',  
+   '提货卷信息', 
+   'user', @CurrentUser, 'table', 'TCoupon'
 go
 
 /*==============================================================*/
 /* Table: TCustomer                                             */
 /*==============================================================*/
 create table TCustomer (
-   Code                 varchar(10)          not null,
-   Name                 varchar(20)          null,
-   SaleMan              varchar(20)          null,
-   SaleCount            int                  null,
-   Price                double precision     null,
-   SaleAmount           double precision     null,
-   IsSignContract       bool                 null,
-   ContractName         varchar(20)          null,
-   ContractCode         varchar(20)          null,
-   constraint PK_TCUSTOMER primary key (Code)
+   Id                   int                  identity,
+   Code                 varchar(20)          not null,
+   Name                 varchar(20)          not null,
+   SaleManId            int                  not null,
+   SaleCount            int                  not null,
+   Price                decimal(10,2)        not null,
+   CreateTime           datetime             not null,
+   constraint PK_TCUSTOMER primary key (Id)
 )
 go
 
@@ -205,120 +212,64 @@ end
 
 select @CurrentUser = user_name() 
 execute sp_addextendedproperty 'MS_Description',  
-   '客户信息', 
+   '用户信息', 
    'user', @CurrentUser, 'table', 'TCustomer'
 go
 
 /*==============================================================*/
-/* Table: TFinance                                              */
+/* Table: TOrderProduct                                         */
 /*==============================================================*/
-create table TFinance (
+create table TOrderProduct (
    Id                   int                  not null,
-   CustomerCode         varchar(10)          null,
-   Batch                varchar(20)          null,
-   constraint PK_TFINANCE primary key (Id)
-)
-go
-
-if exists(select 1 from sys.extended_properties p where
-      p.major_id = object_id('TFinance')
-  and p.minor_id = (select c.column_id from sys.columns c where c.object_id = p.major_id and c.name = 'Batch')
-)
-begin
-   declare @CurrentUser sysname
-select @CurrentUser = user_name()
-execute sp_dropextendedproperty 'MS_Description', 
-   'user', @CurrentUser, 'table', 'TFinance', 'column', 'Batch'
-
-end
-
-
-select @CurrentUser = user_name()
-execute sp_addextendedproperty 'MS_Description', 
-   '关联提货单的批次号',
-   'user', @CurrentUser, 'table', 'TFinance', 'column', 'Batch'
-go
-
-/*==============================================================*/
-/* Table: TLogin                                                */
-/*==============================================================*/
-create table TLogin (
-   UserId               int                  not null,
-   UserName             varchar(10)          null,
-   Password             varchar(10)          null,
-   Telephone            varchar(20)          null,
-   RoleId               int                  null,
-   constraint PK_TLOGIN primary key (UserId)
+   ProductId            int                  not null,
+   OrderId              int                  not null,
+   Count                int                  not null,
+   DeliveryNumber       varchar(50)          not null,
+   CreateTime           datetime             not null,
+   constraint PK_TORDERPRODUCT primary key (Id)
 )
 go
 
 if exists (select 1 from  sys.extended_properties
-           where major_id = object_id('TLogin') and minor_id = 0)
+           where major_id = object_id('TOrderProduct') and minor_id = 0)
 begin 
    declare @CurrentUser sysname 
 select @CurrentUser = user_name() 
 execute sp_dropextendedproperty 'MS_Description',  
-   'user', @CurrentUser, 'table', 'TLogin' 
+   'user', @CurrentUser, 'table', 'TOrderProduct' 
  
 end 
 
 
 select @CurrentUser = user_name() 
 execute sp_addextendedproperty 'MS_Description',  
-   '登陆表', 
-   'user', @CurrentUser, 'table', 'TLogin'
-go
-
-/*==============================================================*/
-/* Table: TOrder                                                */
-/*==============================================================*/
-create table TOrder (
-   Id                   varchar(10)          not null,
-   ProductId            varchar(10)          null,
-   SupplierId           varchar(10)          null,
-   BuyCount             int                  null,
-   CouponNumber         varchar(20)          null,
-   Batch                varchar(20)          null,
-   Createtime           datetime             null,
-   Status               int                  null,
-   Phone                varchar(20)          null,
-   Receiver             varchar(20)          null,
-   ReceiverAddress      varchar(30)          null,
-   DeliveryNumber       varchar(20)          null,
-   constraint PK_TORDER primary key (Id)
-)
-go
-
-/*==============================================================*/
-/* Table: TPage                                                 */
-/*==============================================================*/
-create table TPage (
-   Id                   int                  not null,
-   Title                varchar(20)          null,
-   HeaderBanner         int                  null,
-   TicketId             char(10)             null,
-   constraint PK_TPAGE primary key (Id)
-)
+   '订单商品明细', 
+   'user', @CurrentUser, 'table', 'TOrderProduct'
 go
 
 /*==============================================================*/
 /* Table: TProduct                                              */
 /*==============================================================*/
 create table TProduct (
-   Id                   varchar(30)          not null,
-   Name                 varchar(20)          null,
-   Title                varchar(20)          null,
-   SupplierId           varchar(10)          null,
-   DeliveryArea         varchar(50)          null,
-   Class1               varchar(20)          null,
-   Class2               varchar(20)          null,
-   SalePrice            double precision     null,
-   TotalStock           int                  null,
-   SaleAmount           int                  null,
-   AvailableStock       int                  null,
-   Status               int                  null,
-   Cost                 double precision     null,
-   Description          varchar(100)         null,
+   Id                   int                  identity,
+   Name                 varchar(20)          not null,
+   Code                 varchar(50)          not null,
+   SupplierId           int                  not null,
+   SupplierName         varchar(50)          not null,
+   DeliveryAddress      varchar(50)          not null,
+   ProvinceId           int                  not null,
+   CityId               int                  not null,
+   DistrictId           int                  not null,
+   Class1               int                  not null,
+   Class2               int                  not null,
+   SalePrice            decimal(10,2)        not null,
+   TotalStock           int                  not null,
+   SaledStock           int                  not null,
+   Status               char(1)              not null,
+   Cost                 decimal(10,2)        not null,
+   Description          varchar(100)         not null,
+   UpdateTime           datetime             not null,
+   CreateTime           datetime             not null,
    constraint PK_TPRODUCT primary key (Id)
 )
 go
@@ -345,7 +296,12 @@ go
 /*==============================================================*/
 create table TProductImage (
    Id                   int                  not null,
-   Path                 varchar(20)          null,
+   ProductId            int                  not null,
+   Class1               int                  not null,
+   Class2               int                  not null,
+   Code                 varchar(20)          not null,
+   FilePath             varchar(50)          not null,
+   CreateTime           datetime             not null,
    constraint PK_TPRODUCTIMAGE primary key (Id)
 )
 go
@@ -378,71 +334,78 @@ execute sp_addextendedproperty 'MS_Description',
 go
 
 /*==============================================================*/
-/* Table: TSupplier                                             */
+/* Table: TSoOrder                                              */
 /*==============================================================*/
-create table TSupplier (
-   Id                   varchar(10)          not null,
-   Name                 varchar(20)          null,
-   Type                 int                  null,
-   FinanceContactor     varchar(20)          null,
-   FinancePhone         varchar(20)          null,
-   Sender               varchar(20)          null,
-   SenderPhone          varchar(20)          null,
-   CompanyName          varchar(20)          null,
-   CompanyAddress       varchar(20)          null,
-   AfterMarketer        varchar(20)          null,
-   AfterMarketPhone     varchar(20)          null,
-   constraint PK_TSUPPLIER primary key (Id)
-)
-go
-
-/*==============================================================*/
-/* Table: TTicket                                               */
-/*==============================================================*/
-create table TTicket (
-   Id                   int                  not null,
-   CustomerCode         varchar(20)          null,
-   Batch                varchar(20)          null,
-   CreateTime           datetime             null,
-   ValidityStartTime    datetime             null,
-   ValidityEndTime      datetime             null,
-   CouponRange          varchar(20)          null,
-   Status               int                  null,
-   Operator             varchar(20)          null,
-   ActiveMethod         int                  null,
-   ActiveTime           datetime             null,
-   Receiver             varchar(20)          null,
-   ReceiverPhone        varchar(20)          null,
-   ReceiverAddress      varchar(20)          null,
-   ProductIdPool        varchar(50)          null,
-   constraint PK_TTICKET primary key (Id)
+create table TSoOrder (
+   Id                   int                  identity,
+   OrderCode            varchar(50)          not null,
+   DeliveryAddress      varchar(100)         not null,
+   ContactorName        varchar(20)          not null,
+   ContactorPhone       varchar(20)          not null,
+   ZipCode              varchar(20)          not null,
+   PhoneNumber          varchar(20)          not null,
+   Remark               varchar(100)         not null,
+   CreateTime           datetime             not null,
+   constraint PK_TSOORDER primary key (Id)
 )
 go
 
 if exists (select 1 from  sys.extended_properties
-           where major_id = object_id('TTicket') and minor_id = 0)
+           where major_id = object_id('TSoOrder') and minor_id = 0)
 begin 
    declare @CurrentUser sysname 
 select @CurrentUser = user_name() 
 execute sp_dropextendedproperty 'MS_Description',  
-   'user', @CurrentUser, 'table', 'TTicket' 
+   'user', @CurrentUser, 'table', 'TSoOrder' 
  
 end 
 
 
 select @CurrentUser = user_name() 
 execute sp_addextendedproperty 'MS_Description',  
-   '提货卷，买的优惠劵的订单', 
-   'user', @CurrentUser, 'table', 'TTicket'
+   '订单表，重要', 
+   'user', @CurrentUser, 'table', 'TSoOrder'
+go
+
+/*==============================================================*/
+/* Table: TSupplier                                             */
+/*==============================================================*/
+create table TSupplier (
+   Id                   int                  identity,
+   name                 varchar(20)          not null,
+   Type                 char(1)              not null,
+   FinanceContactor     varchar(20)          not null,
+   FinancePhone         varchar(20)          not null,
+   Sender               varchar(20)          not null,
+   SenderPhone          varchar(20)          not null,
+   CreateTime           datetime             not null,
+   UpdateTime           datetime             not null,
+   constraint PK_TSUPPLIER primary key (Id)
+)
+go
+
+alter table TBackendUser
+   add constraint FK_TBACKEND_REFERENCE_TROLE foreign key (RoleId)
+      references TRole (RoleId)
 go
 
 alter table TCoupon
-   add constraint FK_TCOUPON_REFERENCE_TTICKET foreign key (TicketId)
-      references TTicket (Id)
+   add constraint FK_TCOUPON_REFERENCE_TCUSTOME foreign key (CustomerId)
+      references TCustomer (Id)
 go
 
-alter table TLogin
-   add constraint FK_TLOGIN_REFERENCE_TROLE foreign key (RoleId)
-      references TRole (RoleId)
+alter table TOrderProduct
+   add constraint FK_TORDERPR_REFERENCE_TSOORDER foreign key (OrderId)
+      references TSoOrder (Id)
+go
+
+alter table TProduct
+   add constraint FK_TPRODUCT_REFERENCE_TSUPPLIE foreign key (SupplierId)
+      references TSupplier (Id)
+go
+
+alter table TProductImage
+   add constraint FK_TPRODUCT_REFERENCE_TPRODUCT foreign key (ProductId)
+      references TProduct (Id)
 go
 

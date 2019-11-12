@@ -21,7 +21,7 @@ namespace WebAPI
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
             .UseKestrel()
-            //.UseUrls("http://localhost:5000", "http://106.54.112.131:9007")
+            .UseUrls("http://localhost:5000", "http://106.54.112.131:9007")
             .UseKestrel(options => options.Listen(IPAddress.Any, 5001))
             .UseIISIntegration()
             .UseStartup<Startup>();

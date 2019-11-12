@@ -6,6 +6,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Dongfu\Data\**" />
+    <Compile Remove="Areas\Dongfu\Models\**" />
+    <Compile Remove="Areas\Dongfu\Views\**" />
+    <Content Remove="Areas\Dongfu\Data\**" />
+    <Content Remove="Areas\Dongfu\Models\**" />
+    <Content Remove="Areas\Dongfu\Views\**" />
+    <EmbeddedResource Remove="Areas\Dongfu\Data\**" />
+    <EmbeddedResource Remove="Areas\Dongfu\Models\**" />
+    <EmbeddedResource Remove="Areas\Dongfu\Views\**" />
+    <None Remove="Areas\Dongfu\Data\**" />
+    <None Remove="Areas\Dongfu\Models\**" />
+    <None Remove="Areas\Dongfu\Views\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="3.1.6" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
@@ -15,14 +30,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Dongfu\Data\" />
-    <Folder Include="Areas\Dongfu\Models\" />
-    <Folder Include="Areas\Dongfu\Views\" />
+    <ProjectReference Include="..\src\TicketCode.Application\TicketCode.Application.csproj" />
+    <ProjectReference Include="..\TicketCode.Helper\TicketCode.Helper.csproj" />
+    <ProjectReference Include="..\WebAPI.ORM\WebAPI.ORM.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\TicketCode.Application\TicketCode.Application.csproj" />
-    <ProjectReference Include="..\WebAPI.ORM\WebAPI.ORM.csproj" />
+    <Folder Include="Areas\Dongfuh5\Data\" />
+    <Folder Include="Areas\Dongfuh5\Models\" />
+    <Folder Include="Areas\Dongfuh5\Views\" />
   </ItemGroup>
 
 </Project>
